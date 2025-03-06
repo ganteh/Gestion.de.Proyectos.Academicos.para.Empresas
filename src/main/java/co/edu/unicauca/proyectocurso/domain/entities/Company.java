@@ -1,5 +1,5 @@
 
-package co.edu.unicauca.figuras.domain.entities;
+package co.edu.unicauca.proyectocurso.domain.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class Company extends User {
     public Company(String email, String password, String nit, String name, String sector, 
                    String contactPhone, String contactFirstName, String contactLastName, 
                    String contactPosition) {
-        super(email, password);
+        super(email, password, "Empresa");
         this.nit = nit;
         this.name = name;
         this.sector = sector;
@@ -100,6 +100,11 @@ public class Company extends User {
 
     public void setProjects(List<Project> projects) {
         this.projects = projects;
+    }
+    
+    @Override
+    public String toString() {
+        return "Empresa{" + "username=" + getUsername() + ", nit=" + nit + ", sector=" + sector + '}';
     }
     
 }

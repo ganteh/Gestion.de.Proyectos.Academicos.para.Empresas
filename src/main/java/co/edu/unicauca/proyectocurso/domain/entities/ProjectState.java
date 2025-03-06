@@ -1,5 +1,5 @@
 
-package co.edu.unicauca.figuras.domain.entities;
+package co.edu.unicauca.proyectocurso.domain.entities;
 
 /**
  *

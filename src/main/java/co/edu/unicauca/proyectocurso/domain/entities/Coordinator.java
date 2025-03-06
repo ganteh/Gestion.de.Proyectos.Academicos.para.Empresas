@@ -1,5 +1,5 @@
 
-package co.edu.unicauca.figuras.domain.entities;
+package co.edu.unicauca.proyectocurso.domain.entities;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class Coordinator extends User {
     private String lastName;
 
     public Coordinator(String email, String password, String firstName, String lastName) {
-        super(email, password);
+        super(email, password,"Coordinador");
         this.firstName = firstName;
         this.lastName = lastName;
     }

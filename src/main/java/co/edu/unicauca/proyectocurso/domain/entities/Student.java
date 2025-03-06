@@ -1,5 +1,5 @@
 
-package co.edu.unicauca.figuras.domain.entities;
+package co.edu.unicauca.proyectocurso.domain.entities;
 
 /**
  *
@@ -10,7 +10,7 @@ public class Student extends User {
     private String lastName;
 
     public Student(String email, String password, String firstName, String lastName) {
-        super(email, password);
+        super(email, password, "Estudiante");
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -18,5 +18,9 @@ public class Student extends User {
     // Getters y setters
     public String getFullName() {
         return firstName + " " + lastName;
+    }
+    @Override
+    public String getRole() {
+        return "Student";
     }
 }
