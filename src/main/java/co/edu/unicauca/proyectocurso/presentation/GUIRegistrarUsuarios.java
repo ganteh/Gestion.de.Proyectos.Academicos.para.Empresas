@@ -41,8 +41,8 @@ public class GUIRegistrarUsuarios extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
-        txtContraseña = new javax.swing.JTextField();
         cbRol = new javax.swing.JComboBox<>();
+        jPasswordField1 = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,9 +88,9 @@ public class GUIRegistrarUsuarios extends javax.swing.JFrame {
                             .addComponent(jLabel4))
                         .addGap(40, 40, 40)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtContraseña)
                             .addComponent(cbRol, 0, 140, Short.MAX_VALUE)
-                            .addComponent(txtNombre))))
+                            .addComponent(txtNombre)
+                            .addComponent(jPasswordField1))))
                 .addContainerGap(89, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -105,7 +105,7 @@ public class GUIRegistrarUsuarios extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -125,7 +125,7 @@ public class GUIRegistrarUsuarios extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         String username = txtNombre.getText();
-        String password = txtContraseña.getText();
+        String password = new String(jPasswordField1.getPassword());
         String role = cbRol.getSelectedItem().toString();
 
     // Verificar que los campos no estén vacíos
@@ -198,7 +198,7 @@ public class GUIRegistrarUsuarios extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField txtContraseña;
+    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }
