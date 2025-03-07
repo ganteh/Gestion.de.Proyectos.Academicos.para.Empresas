@@ -10,7 +10,7 @@ public class DatabaseConnection {
     private static final String PASSWORD = "CAMILO"; // Si tu MySQL tiene contraseña, agrégala aquí
 
     private static Connection connection;
- 
+  
     public static Connection getConnection() {
         if (connection == null) {
             try {

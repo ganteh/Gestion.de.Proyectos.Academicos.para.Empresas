@@ -19,14 +19,6 @@ public class ProyectoEmpresa {
         
     java.awt.EventQueue.invokeLater(() -> new GUILogin().setVisible(true));
 
-}
-
-   
-
-
-    
-
-
-        
+}  
     }
     
