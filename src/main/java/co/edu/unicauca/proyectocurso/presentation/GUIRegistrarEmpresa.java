@@ -193,7 +193,11 @@ public class GUIRegistrarEmpresa extends javax.swing.JFrame {
         
         if(resultado) {
             JOptionPane.showMessageDialog(this, "Empresa registrada correctamente");
-            // Aquí puedes abrir otra ventana si lo deseas
+            GUIRegistrarProyecto registrarProyecto = new GUIRegistrarProyecto(nit, nombre);
+            registrarProyecto.setVisible(true);
+        
+        this.dispose();
+
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Error al registrar la empresa", 
