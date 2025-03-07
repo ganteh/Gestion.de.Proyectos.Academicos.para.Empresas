@@ -119,7 +119,7 @@ public class GUILogin extends javax.swing.JFrame {
     
     // Validar usuario en la base de datos
     String role = userService.validarUsuario(username, password);
-    
+     
     if (role != null) {
         if (role.equals("Admin")) {
             GUIAdmin adminGUI = new GUIAdmin();
