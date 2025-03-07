@@ -10,4 +10,11 @@
         <maven.compiler.release>17</maven.compiler.release>
         <exec.mainClass>co.edu.unicauca.figuras.proyectoempresa.ProyectoEmpresa</exec.mainClass>
     </properties>
+<dependencies>
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>8.0.33</version>
+    </dependency>
+</dependencies>
 </project>

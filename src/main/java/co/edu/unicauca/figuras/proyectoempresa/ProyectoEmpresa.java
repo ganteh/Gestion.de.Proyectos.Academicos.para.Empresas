@@ -4,7 +4,9 @@
  */
 package co.edu.unicauca.figuras.proyectoempresa;
 
+import co.edu.unicauca.proyectocurso.access.DatabaseConnection;
 import co.edu.unicauca.proyectocurso.presentation.GUIRegistrarUsuarios;
+import co.edu.unicauca.proyectocurso.presentation.GUILogin;
 import javax.swing.SwingUtilities;
 
 /**
@@ -15,14 +17,16 @@ public class ProyectoEmpresa {
     public static void main(String[] args) {
         System.out.println("Aplicación iniciada correctamente.");
         
-        
-        // Iniciar la GUI en el hilo de eventos de Swing
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new GUIRegistrarUsuarios();
-            }
-        });
-    }
+    java.awt.EventQueue.invokeLater(() -> new GUILogin().setVisible(true));
+
 }
+
+   
+
+
+    
+
+
+        
+    }
     
