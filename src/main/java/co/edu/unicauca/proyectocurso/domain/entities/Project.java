@@ -28,6 +28,19 @@ public class Project {
         this.comments = new ArrayList<>();
         this.students = new ArrayList<>();
     }
+    
+       public Project() {
+        this.id = UUID.randomUUID();
+        this.name = "Proyecto sin nombre";
+        this.description = "Descripción no definida";
+        this.date = LocalDate.now();
+        this.state = ProjectState.RECEIVED;
+        this.company = null; // Se puede asignar una empresa predeterminada si es necesario
+        this.comments = new ArrayList<>();
+        this.students = new ArrayList<>();
+        this.tasks = new ArrayList<>();
+        this.FinalizationDate = null; // Se puede definir una fecha predeterminada si aplica
+       }
 
     public void addComment(String comment) {
         comments.add(comment);

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/proyecto_db";
     private static final String USER = "root"; // Cambia esto si usas otro usuario
-    private static final String PASSWORD = "CAMILO"; // Si tu MySQL tiene contraseña, agrégala aquí
+    private static final String PASSWORD = "123456789"; // Si tu MySQL tiene contraseña, agrégala aquí
 
     private static Connection connection;
   
@@ -24,4 +24,13 @@ public class DatabaseConnection {
         }
         return connection;
     }
+    public static Connection getNewConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver"); // Cargar el driver
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("No se encontró el driver de MySQL.", e);
+        }
+    }
+    
 }

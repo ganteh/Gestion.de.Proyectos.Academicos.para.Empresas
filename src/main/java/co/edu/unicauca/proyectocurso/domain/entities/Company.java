@@ -30,7 +30,21 @@ public class Company extends User {
         this.contactLastName = contactLastName;
         this.contactPosition = contactPosition;
         this.projects = new ArrayList<>();
+    }   
+    
+    //Constructor genérico con valores predeterminados
+    public Company() {
+        super("default@empresa.com", "password123", "Empresa"); // Usuario genérico
+        this.nit = "000000000";
+        this.name = "Empresa Desconocida";
+        this.sector = "No especificado";
+        this.contactPhone = "0000000000";
+        this.contactFirstName = "Nombre";
+        this.contactLastName = "Apellido";
+        this.contactPosition = "Cargo";
+        this.projects = new ArrayList<>();
     }
+    
 
     public void addProject(Project project) {
         projects.add(project);
