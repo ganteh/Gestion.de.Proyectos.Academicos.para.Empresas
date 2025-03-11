@@ -152,6 +152,7 @@ public class GUIRegistrarUsuarios extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Error en el registro", 
                                      "Error", JOptionPane.ERROR_MESSAGE);
     }
+    this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

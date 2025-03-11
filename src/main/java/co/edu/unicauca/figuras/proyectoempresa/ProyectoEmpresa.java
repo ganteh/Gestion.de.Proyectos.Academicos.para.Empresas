@@ -24,27 +24,27 @@ public class ProyectoEmpresa {
          ProjectRepositoryImpl repository = new ProjectRepositoryImpl();
 
         // 🔹 1. Probar el método save()
-        Company empresa = new Company();
-        empresa.setNit("123456789"); // NIT existente en la base de datos
-        empresa.setName("Tech Corp");
+        //Company empresa = new Company();
+        //empresa.setNit("123456789"); // NIT existente en la base de datos
+        //empresa.setName("Tech Corp");
 
-        Project newProject = new Project();
-        newProject.setId(UUID.randomUUID());
-        newProject.setName("Nuevo Proyecto");
-        newProject.setDescription("Este es un proyecto de prueba");
-        newProject.setDate(java.time.LocalDate.now());
-        newProject.setState(ProjectState.RECEIVED);
-        newProject.setCompany(empresa);
+        //Project newProject = new Project();
+        //newProject.setId(UUID.randomUUID());
+       // newProject.setName("Nuevo Proyecto");
+       // newProject.setDescription("Este es un proyecto de prueba");
+       // newProject.setDate(java.time.LocalDate.now());
+       // newProject.setState(ProjectState.RECEIVED);
+       // newProject.setCompany(empresa);
 
-        boolean isSaved = repository.save(newProject, empresa.getNit());
-        System.out.println("✅ Proyecto guardado: " + isSaved);
+        //boolean isSaved = repository.save(newProject, empresa.getNit());
+       // System.out.println("✅ Proyecto guardado: " + isSaved);
 
         // 🔹 2. Probar el método findAll()
-        List<Project> proyectos = repository.findAll();
-        System.out.println("🔹 Lista de proyectos:");
-        for (Project p : proyectos) {
-            System.out.println("📌 " + p.getName() + " - " + p.getDescription() + " ID: " + p.getId() + " (Empresa: " + p.getCompany().getName() + ")");
-        }
+       // List<Project> proyectos = repository.findAll();
+       // System.out.println("🔹 Lista de proyectos:");
+        //for (Project p : proyectos) {
+        //    System.out.println("📌 " + p.getName() + " - " + p.getDescription() + " ID: " + p.getId() + " (Empresa: " + p.getCompany().getName() + ")");
+        //}
         
         System.out.println("Aplicación iniciada correctamente.");
         

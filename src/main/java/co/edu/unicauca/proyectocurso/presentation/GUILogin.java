@@ -124,9 +124,15 @@ public class GUILogin extends javax.swing.JFrame {
         if (role.equals("Admin")) {
             GUIAdmin adminGUI = new GUIAdmin();
             adminGUI.setVisible(true);
-        } else if (role.equals("usuario")) {
-            GUIUser userGUI = new GUIUser();
-            userGUI.setVisible(true);
+        } else if (role.equals("Estudiantes")) {
+            GUIStudent EstudianteGUI = new GUIStudent();
+            EstudianteGUI.setVisible(true);
+        }else if (role.equals("Coordinador")) {
+            GUICoord CoordGUI = new GUICoord();
+            CoordGUI.setVisible(true);
+        }else if (role.equals("Empresa")) {
+            GUICompany CompanyGUI = new GUICompany();
+            CompanyGUI.setVisible(true);
         }
         this.dispose(); // Cerrar la ventana de login
     } else {
@@ -191,7 +197,7 @@ private void validarLogin() {
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Bienvenido, Usuario.");
-            new GUIUser().setVisible(true);
+            new GUIStudent().setVisible(true);
             this.dispose();
         }
     }
