@@ -5,6 +5,7 @@
 package co.edu.unicauca.proyectocurso.presentation;
 
 import co.edu.unicauca.proyectocurso.access.UserRepositoryImpl;
+import co.edu.unicauca.proyectocurso.domain.entities.User;
 import co.edu.unicauca.proyectocurso.domain.services.UserService;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -120,6 +121,8 @@ public class GUILogin extends javax.swing.JFrame {
     // Validar usuario en la base de datos
     String role = userService.validarUsuario(username, password);
      
+    User user = new User(username, password, role  );
+    
     if (role != null) {
         if (role.equals("Admin")) {
             GUIAdmin adminGUI = new GUIAdmin();
