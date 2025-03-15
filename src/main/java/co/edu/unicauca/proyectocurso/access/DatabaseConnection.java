@@ -6,7 +6,7 @@ import java.sql.*;
 public class DatabaseConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/proyecto_db";
     private static final String USER = "root"; 
-    private static final String PASSWORD = "CAMILO"; 
+    private static final String PASSWORD = "123456789"; 
 
     private static Connection connection;
 
@@ -96,6 +96,7 @@ public class DatabaseConnection {
         }
     }
 
+    
     public static User getUser(String username, String password) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
@@ -103,4 +104,6 @@ public class DatabaseConnection {
     public static User getUser(String username) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+
 }

@@ -8,12 +8,23 @@ import java.util.List;
 import java.util.UUID;
 
 public class ProjectRepositoryImpl implements IProjectRepository {
+    
+    private Connection connection;
 
+    public ProjectRepositoryImpl(Connection conn) {
+        this.connection = connection;
+    }
+    
+    public ProjectRepositoryImpl(){}
+    
+    
+
+ 
     @Override
     public boolean save(Project project, String nitEmpresa) {
         String sql = "INSERT INTO projects (id, name, description, date, state, company_nit) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getNewConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
            
             pstmt.setString(1, project.getId().toString());
@@ -63,4 +74,27 @@ public class ProjectRepositoryImpl implements IProjectRepository {
         }
         return projects;
     }
+
+    @Override
+    public boolean update(Project project) {
+    String sql = "UPDATE projects SET name = ?, description = ?, date = ?, state = ?, company_nit = ? WHERE id = ?";
+
+    try (Connection conn = DatabaseConnection.getNewConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        pstmt.setString(1, project.getName());
+        pstmt.setString(2, project.getDescription());
+        pstmt.setDate(3, Date.valueOf(project.getDate())); // Convertir LocalDate a SQL Date
+        pstmt.setString(4, project.getState().toString()); // Enum convertido a String
+        pstmt.setString(5, project.getCompany().getNit());
+        pstmt.setString(6, project.getId().toString()); // UUID como String
+
+        int rowsAffected = pstmt.executeUpdate();
+        return rowsAffected > 0; // Retorna true si se actualizó correctamente
+
+    } catch (SQLException e) {
+        System.err.println("Error al actualizar el proyecto: " + e.getMessage());
+        return false;
+    }
+}
 }

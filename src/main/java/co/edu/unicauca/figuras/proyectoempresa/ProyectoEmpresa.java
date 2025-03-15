@@ -9,6 +9,7 @@ import co.edu.unicauca.proyectocurso.access.ProjectRepositoryImpl;
 import co.edu.unicauca.proyectocurso.domain.entities.Company;
 import co.edu.unicauca.proyectocurso.domain.entities.Project;
 import co.edu.unicauca.proyectocurso.domain.entities.ProjectState;
+import co.edu.unicauca.proyectocurso.presentation.GUICoordProyPendientes;
 import co.edu.unicauca.proyectocurso.presentation.GUIRegistrarUsuarios;
 import co.edu.unicauca.proyectocurso.presentation.GUILogin;
 import java.util.List;
@@ -24,20 +25,20 @@ public class ProyectoEmpresa {
          ProjectRepositoryImpl repository = new ProjectRepositoryImpl();
 
         // 🔹 1. Probar el método save()
-        Company empresa = new Company();
-        empresa.setNit("123456789"); // NIT existente en la base de datos
-        empresa.setName("Tech Corp");
-
-        Project newProject = new Project();
-        newProject.setId(UUID.randomUUID());
-        newProject.setName("Nuevo Proyecto");
-        newProject.setDescription("Este es un proyecto de prueba");
-        newProject.setDate(java.time.LocalDate.now());
-        newProject.setState(ProjectState.RECEIVED);
-       newProject.setCompany(empresa);
-
-        boolean isSaved = repository.save(newProject, empresa.getNit());
-       System.out.println("✅ Proyecto guardado: " + isSaved);
+//        Company empresa = new Company();
+//        empresa.setNit("123456789"); // NIT existente en la base de datos
+//        empresa.setName("Tech Corp");
+//
+//        Project newProject = new Project();
+//        newProject.setId(UUID.randomUUID());
+//        newProject.setName("Nuevo Proyecto");
+//        newProject.setDescription("Este es un proyecto de prueba");
+//        newProject.setDate(java.time.LocalDate.now());
+//        newProject.setState(ProjectState.RECEIVED);
+//       newProject.setCompany(empresa);
+//
+//        boolean isSaved = repository.save(newProject, empresa.getNit());
+//       System.out.println("✅ Proyecto guardado: " + isSaved);
 
         // 🔹 2. Probar el método findAll()
        // List<Project> proyectos = repository.findAll();
@@ -48,7 +49,8 @@ public class ProyectoEmpresa {
         
         System.out.println("Aplicación iniciada correctamente.");
         
-    java.awt.EventQueue.invokeLater(() -> new GUILogin().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new GUILogin().setVisible(true));
+
 
 }  
     }

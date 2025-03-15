@@ -17,4 +17,11 @@ public interface IProjectRepository {
      * @return Lista de proyectos.
      */
     List<Project> findAll();
+
+    /**
+     *
+     * @param project Proyecto a actualizar
+     * @return True si el proyecto se actualizo correctamente, en caso contrario False
+     */
+    public boolean update(Project project);
 }

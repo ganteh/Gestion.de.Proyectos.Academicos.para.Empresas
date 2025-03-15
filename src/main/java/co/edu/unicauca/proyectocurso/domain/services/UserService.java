@@ -5,11 +5,8 @@ import co.edu.unicauca.proyectocurso.domain.entities.User;
 
 public class UserService {
     
-    
-    
     User user;
     
-
     public boolean registerUser(String username, String password, String role) {
         if (DatabaseConnection.userExists(username)) {
             System.out.println("❌ El usuario ya existe.");
@@ -18,6 +15,7 @@ public class UserService {
         return DatabaseConnection.registerUser(username, password, role);
     }
 
+    
     public String validarUsuario(String username, String password) {
         String miRol = DatabaseConnection.getUserRole(username, password); 
         if (miRol==null){
@@ -26,4 +24,5 @@ public class UserService {
         user=DatabaseConnection.getUser(username);
         return  miRol;
     }
+
 }
