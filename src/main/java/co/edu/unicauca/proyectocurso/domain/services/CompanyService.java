@@ -36,4 +36,11 @@ public class CompanyService {
     public List<Company> listCompanies() {
         return repository.findAll();
     }
+    
+    public Company findCompanyByNit(List<Company> companies, String nit) {
+        return companies.stream()
+                .filter(company -> company.getNit().equals(nit))
+                .findFirst()
+                .orElse(null); // Retorna null si no encuentra coincidencias
+    }
 }

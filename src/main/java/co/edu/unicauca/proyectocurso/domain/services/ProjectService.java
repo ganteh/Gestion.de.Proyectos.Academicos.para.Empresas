@@ -28,9 +28,15 @@ public class ProjectService extends Observado {
         return repository.findAll();
     }
     
-        public List<Project> getPendingProjects() {
+    public List<Project> getPendingProjects() {
         return repository.findAll().stream()
                 .filter(p -> p.getState() == ProjectState.RECEIVED)
+                .toList();
+    }
+    
+    public List<Project> getAcceptedProjects() {
+        return repository.findAll().stream()
+                .filter(p -> p.getState() == ProjectState.ACCEPTED)
                 .toList();
     }
 

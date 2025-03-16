@@ -120,6 +120,8 @@ public class Company extends User {
     public String toString() {
         return "Empresa{" + "username=" + getUsername() + ", nit=" + nit + ", sector=" + sector + '}';
     }
+
+
     
 }
 

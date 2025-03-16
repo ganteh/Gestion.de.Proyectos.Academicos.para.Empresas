@@ -17,7 +17,10 @@ public class Project {
     private List<String> comments;
     private List<Student> students;
     private List<Task> tasks;
-
+    private float budget;
+    private int maxMonths;
+    private String objectives;
+    
     public Project(String name, String summary, String objectives, String description, int maxMonths, Double budget, Company company) {
         this.id = UUID.randomUUID();
         this.name = name;
@@ -84,4 +87,13 @@ public class Project {
     
     public Date getFinalizationDate() {return FinalizationDate;}
     public void setFinalizationDate(Date FinalizationDate) {this.FinalizationDate = FinalizationDate;}
+    
+    public float getBudget(){return budget;}
+    public void setBudget(float budget) {this.budget = budget;}
+    
+    public int getMaxMonths(){return maxMonths;}
+    public void setMaxMonths(int maxMonths) {this.maxMonths = maxMonths;}
+    
+    public String getObjectives() {return objectives;}
+    public void setObjectives(String objectives) {this.objectives = objectives;}
 }
