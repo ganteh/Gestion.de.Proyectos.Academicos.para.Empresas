@@ -12,4 +12,6 @@ import java.util.List;
 public interface IUserRepository {
     boolean save(User user);
     List<User> findAll();
+    
+    
 }

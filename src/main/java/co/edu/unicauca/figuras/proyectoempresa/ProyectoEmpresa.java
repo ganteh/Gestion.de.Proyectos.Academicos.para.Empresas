@@ -49,8 +49,8 @@ public class ProyectoEmpresa {
         
         System.out.println("Aplicación iniciada correctamente.");
         
-//        java.awt.EventQueue.invokeLater(() -> new GUILogin().setVisible(true));
-        java.awt.EventQueue.invokeLater(() -> new GUICoordProyPendientes().setVisible(true));
+       java.awt.EventQueue.invokeLater(() -> new GUILogin().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new GUICoordProyPendientes().setVisible(true));
 
 
 }  

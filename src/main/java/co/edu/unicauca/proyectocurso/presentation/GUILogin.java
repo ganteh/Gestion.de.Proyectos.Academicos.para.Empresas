@@ -19,7 +19,7 @@ public class GUILogin extends javax.swing.JFrame {
     private UserService userService;
 
     public GUILogin() {
-        userService = new UserService();
+        userService = new UserService(new UserRepositoryImpl());
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -116,7 +116,7 @@ public class GUILogin extends javax.swing.JFrame {
     String password = new String(jPasswordField1.getPassword());
 
     // Crear instancia de UserService
-    UserService userService = new UserService();
+    UserService userService = new UserService(new UserRepositoryImpl());
     
     // Validar usuario en la base de datos
     String role = userService.validarUsuario(username, password);

@@ -22,7 +22,7 @@ public class GUIRegistrarUsuarios extends javax.swing.JFrame {
     public GUIRegistrarUsuarios() {
         initComponents();
         setLocationRelativeTo(null);  // Centrar la ventana
-       userService = new UserService();
+       userService = new UserService(new UserRepositoryImpl());
         setVisible(true);  
     }
 
