@@ -224,9 +224,9 @@ public class GUIRegistrarProyecto extends javax.swing.JFrame {
     // Mostrar mensaje de éxito o error
     if (registrado) {
         JOptionPane.showMessageDialog(this, "Proyecto registrado correctamente.");
-    } else {
-        JOptionPane.showMessageDialog(this, "Error al registrar el proyecto.", "Error", JOptionPane.ERROR_MESSAGE);
-    }
+    } //else {
+       // JOptionPane.showMessageDialog(this, "Error al registrar el proyecto.", "Error", JOptionPane.ERROR_MESSAGE);
+  //  }
 
     // Verificar que el proyecto se guardó en el ArrayList
     System.out.println("Lista de proyectos guardados:");

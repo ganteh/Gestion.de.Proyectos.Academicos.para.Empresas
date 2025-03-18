@@ -80,13 +80,25 @@ public class UserRepositoryImpl implements IUserRepository {
         }
         return false;
     }
-    
+    public boolean updateUser(String username, String newPassword, String newRole) {
+        String sql = "UPDATE users SET password = ?, role = ? WHERE username = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newPassword);
+            stmt.setString(2, newRole);
+            stmt.setString(3, username);
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
         public static User getUser(String username) {
     String sql = "SELECT username, password, role FROM users WHERE username = ?";
     try (Connection conn = getNewConnection();
          PreparedStatement stmt = conn.prepareStatement(sql)) {
          
-         stmt.setString(1, username);
+         stmt.setString(1, username);    
          
          try (ResultSet rs = stmt.executeQuery()) {
              if (rs.next()) {

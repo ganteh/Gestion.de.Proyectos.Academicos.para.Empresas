@@ -125,12 +125,15 @@ public class GUILogin extends javax.swing.JFrame {
     
     if (role != null) {
         if (role.equals("Admin")) {
+            JOptionPane.showMessageDialog(this, "Bienvenido, Administrador.");
             GUIAdmin adminGUI = new GUIAdmin();
             adminGUI.setVisible(true);
         } else if (role.equals("Estudiante")) {
+            JOptionPane.showMessageDialog(this, "Bienvenido, Estudiante:"+user.getUsername());
             GUIStudent EstudianteGUI = new GUIStudent();
             EstudianteGUI.setVisible(true);
         }else if (role.equals("Coordinador")) {
+            JOptionPane.showMessageDialog(this, "Bienvenido, Coordinador: "+user.getUsername());
             GUICoord CoordGUI = new GUICoord();
             CoordGUI.setVisible(true);
         }else if (role.equals("Empresa")) {
@@ -185,25 +188,7 @@ public class GUILogin extends javax.swing.JFrame {
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
-private void validarLogin() {
-    
-        String username = jTextField1.getText();
-        String password = new String(jPasswordField1.getPassword());
 
-        String role = userService.validarUsuario(username, password);
-
-        if (role == null) {
-            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
-        } else if (role.equals("Admin")) {
-            JOptionPane.showMessageDialog(this, "Bienvenido, Administrador.");
-            new GUIAdmin().setVisible(true);
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Bienvenido, Usuario.");
-            new GUIStudent().setVisible(true);
-            this.dispose();
-        }
-    }
 
 
 }
