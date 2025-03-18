@@ -26,7 +26,7 @@ public class ProjectRepositoryImpl implements IProjectRepository {
  
     @Override
     public boolean save(Project project, String nitEmpresa) {
-        String sql = "INSERT INTO projects (id, name, description, date, state, company_nit, budget, max_months, objectives) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO projects (id, name, description, date, state, company_nit, budget, max_months, objectives) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getNewConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
