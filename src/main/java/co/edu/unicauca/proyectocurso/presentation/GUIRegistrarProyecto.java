@@ -33,10 +33,9 @@ public class GUIRegistrarProyecto extends javax.swing.JFrame {
     ProjectService = new ProjectService(new ProjectRepositoryImpl()); // ✅ Inyecta la implementación del repositorio
     initComponents();
     }
-    public GUIRegistrarProyecto(String nit, String nombreEmpresa) {
+    public GUIRegistrarProyecto(String nit) {
     ProjectService = new ProjectService(new ProjectRepositoryImpl());
     this.nitEmpresa = nit;  // Guardamos el NIT para asociar proyectos a la empresa
-    this.nombreEmpresa = nombreEmpresa;
     initComponents();
 }
 

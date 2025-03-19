@@ -6,11 +6,9 @@ import java.sql.*;
 public class DatabaseConnection {
     private static final String URL = "jdbc:mysql://localhost:3306/proyecto_db";
     private static final String USER = "root"; 
-<<<<<<< HEAD
+
     private static final String PASSWORD = "CAMILO"; 
-=======
-    private static final String PASSWORD = "0129"; 
->>>>>>> 18277b9 (Añadiendo cambios en GUIRegistrarProyecto)
+ 
 
     private static Connection connection;
 

@@ -14,31 +14,56 @@ import java.util.List;
  * @author ibell
  */
 public class CompanyRepositoryImpl implements ICompanyRepository {
+    
+    
+        private Connection conn;
 
-    @Override
-    public boolean save(Company company) {
-        String sql = "INSERT INTO companies (nit, name, sector, contact_phone, contact_name, contact_lastname, contact_position) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-        try (Connection conn = DatabaseConnection.getNewConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, company.getNit());
-            pstmt.setString(2, company.getName());
-            pstmt.setString(3, company.getSector());
-            pstmt.setString(4, company.getContactPhone());
-            pstmt.setString(5, company.getContactFirstName());
-            pstmt.setString(6, company.getContactLastName());
-            pstmt.setString(7, company.getContactPosition());
-
-            int rowsAffected = pstmt.executeUpdate();
-            return rowsAffected > 0; // Retorna true si la inserción fue exitosa
-
-        } catch (SQLException e) {
-            System.err.println("Error al guardar la empresa: " + e.getMessage());
-            return false;
-        }
+    
+        public CompanyRepositoryImpl() {
+        this.conn = DatabaseConnection.getConnection();
     }
 
+    @Override
+public boolean save(Company company) {
+        // Primero, obtenemos el id del usuario que crea la empresa.
+        // Suponemos que el email (o username) del usuario está en la entidad Company (heredado de User).
+        String getUserIdSql = "SELECT id FROM users WHERE username = ? AND role = 'Empresa'";
+        String companySql = "INSERT INTO companies (nit, name, sector, contact_phone, contact_name, contact_lastname, contact_position, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        try (Connection conn = DatabaseConnection.getNewConnection();
+             PreparedStatement getUserStmt = conn.prepareStatement(getUserIdSql)) {
+             
+            // Usamos el username de la empresa (que es el email/heredado)
+            getUserStmt.setString(1, company.getUsername());
+            ResultSet rs = getUserStmt.executeQuery();
+            
+            if (rs.next()) {
+                int userId = rs.getInt("id");
+                
+                // Ahora, insertar los datos de la empresa, incluyendo el userId
+                try (PreparedStatement companyStmt = conn.prepareStatement(companySql)) {
+                    companyStmt.setString(1, company.getNit());
+                    companyStmt.setString(2, company.getName());
+                    companyStmt.setString(3, company.getSector());
+                    companyStmt.setString(4, company.getContactPhone());
+                    companyStmt.setString(5, company.getContactFirstName());
+                    companyStmt.setString(6, company.getContactLastName());
+                    companyStmt.setString(7, company.getContactPosition());
+                    companyStmt.setInt(8, userId);
+                    
+                    int rowsAffected = companyStmt.executeUpdate();
+                    return rowsAffected > 0;
+                }
+            } else {
+                System.out.println("No se encontró un usuario con username: " + company.getUsername() + " y rol Empresa");
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("Error al guardar la empresa: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
     @Override
     public List<Company> findAll() {
         List<Company> companies = new ArrayList<>();
