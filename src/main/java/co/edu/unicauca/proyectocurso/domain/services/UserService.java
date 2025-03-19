@@ -38,5 +38,11 @@ public class UserService {
     public boolean updateUser(String username, String newPassword, String newRole) {
         return userRepository.updateUser(username, newPassword, newRole);
     }
-
+    public List<User> searchUsers(String query) {
+        return userRepository.searchUsers(query);
+    }
+    
+    public boolean deleteUser(String username){
+        return userRepository.deleteUser(username);
+    }
 }
