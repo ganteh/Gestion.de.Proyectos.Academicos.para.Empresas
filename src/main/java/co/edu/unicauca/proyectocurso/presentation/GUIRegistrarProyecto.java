@@ -4,11 +4,15 @@
  */
 package co.edu.unicauca.proyectocurso.presentation;
 
+import co.edu.unicauca.proyectocurso.access.CompanyRepositoryImpl;
 import co.edu.unicauca.proyectocurso.domain.services.CompanyService;
 import co.edu.unicauca.proyectocurso.domain.services.ProjectService;
 import co.edu.unicauca.proyectocurso.access.ProjectRepositoryImpl;
 import co.edu.unicauca.proyectocurso.access.ProjectRepositoryImpl;
+import co.edu.unicauca.proyectocurso.domain.entities.Company;
 import co.edu.unicauca.proyectocurso.domain.entities.Project;
+import co.edu.unicauca.proyectocurso.domain.entities.ProjectState;
+import java.time.LocalDate;
 import javax.swing.JOptionPane;
 
 
@@ -207,32 +211,91 @@ public class GUIRegistrarProyecto extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
- // Extraer datos de los campos de texto
-    String nombre = jTextField1.getText();
-    String resumen = jTextField2.getText();
-    String objetivos = jTextField3.getText();
-    String descripcion = jTextField4.getText();
-    int tiempoMaximo = Integer.parseInt(jTextField5.getText());
-    double presupuesto = Double.parseDouble(jTextField6.getText());
+    // Extraer datos de los campos de texto
+        String nombre = jTextField1.getText();
+        String resumen = jTextField2.getText();
+        String objetivos = jTextField3.getText();
+        String descripcion = jTextField4.getText();
+        int tiempoMaximo;
+        double presupuesto;
 
-    // Crear el objeto Proyecto
-    Project nuevoProyecto = new Project(nombre, resumen, objetivos, descripcion, tiempoMaximo, presupuesto, null);
+        // Validar y parsear Tiempo Máximo y Presupuesto
+        try {
+            tiempoMaximo = Integer.parseInt(jTextField5.getText());
+            presupuesto = Double.parseDouble(jTextField6.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Tiempo Máximo y Presupuesto deben ser números válidos.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    // Guardar el proyecto en el ArrayList a través del servicio
-    boolean registrado = ProjectService.registerProject(nuevoProyecto, nitEmpresa);
+        // Parsear la fecha (asumiendo formato AAAA-MM-DD)
+        LocalDate fecha;
+        try {
+            fecha = LocalDate.parse(jTextField7.getText()); // Ejemplo: "2025-03-18"
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "La Fecha debe estar en formato AAAA-MM-DD.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    // Mostrar mensaje de éxito o error
-    if (registrado) {
-        JOptionPane.showMessageDialog(this, "Proyecto registrado correctamente.");
-    } //else {
-       // JOptionPane.showMessageDialog(this, "Error al registrar el proyecto.", "Error", JOptionPane.ERROR_MESSAGE);
-  //  }
+        // Estado (por ahora, usar RECEIVED para proyectos nuevos)
+        ProjectState estado = ProjectState.RECEIVED;
 
-    // Verificar que el proyecto se guardó en el ArrayList
-    System.out.println("Lista de proyectos guardados:");
-    for (Project p : ProjectService.listProjects()) {
-        System.out.println("Nombre: " + p.getName() + ", Empresa: " + nitEmpresa);
-    }
+        // Validar que los campos no estén vacíos
+        if (nombre.isEmpty() || resumen.isEmpty() || objetivos.isEmpty() || descripcion.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Crear el objeto Proyecto
+        Project nuevoProyecto = new Project();
+        nuevoProyecto.setName(nombre);
+        nuevoProyecto.setDescription(descripcion);
+        nuevoProyecto.setObjectives(objetivos);
+        nuevoProyecto.setMaxMonths(tiempoMaximo);
+        nuevoProyecto.setBudget((float) presupuesto);
+        nuevoProyecto.setDate(fecha);
+        nuevoProyecto.setState(estado);
+
+        // Asociar la empresa usando nitEmpresa
+        if (nitEmpresa != null && !nitEmpresa.isEmpty()) {
+            CompanyService companyService = new CompanyService(new CompanyRepositoryImpl());
+            Company company = companyService.findCompanyByNit(nitEmpresa);
+            if (company != null) {
+                nuevoProyecto.setCompany(company);
+                company.addProject(nuevoProyecto); // Relacionar el proyecto con la empresa
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró la empresa con NIT: " + nitEmpresa, "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No se proporcionó un NIT de empresa válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Guardar el proyecto a través del servicio
+        boolean registrado = ProjectService.registerProject(nuevoProyecto, nitEmpresa);
+
+        // Mostrar mensaje de éxito o error
+        if (registrado) {
+            JOptionPane.showMessageDialog(this, "Proyecto registrado correctamente.");
+            // Limpiar los campos después de registrar
+            jTextField1.setText("");
+            jTextField2.setText("");
+            jTextField3.setText("");
+            jTextField4.setText("");
+            jTextField5.setText("");
+            jTextField6.setText("");
+            jTextField7.setText("");
+            jTextField8.setText("");
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al registrar el proyecto. Verifica la conexión a la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        // Verificar que el proyecto se guardó
+        System.out.println("Lista de proyectos guardados:");
+        for (Project p : ProjectService.listProjects()) {
+            System.out.println("Nombre: " + p.getName() + ", Empresa: " + (p.getCompany() != null ? p.getCompany().getNit() : "Sin empresa"));
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

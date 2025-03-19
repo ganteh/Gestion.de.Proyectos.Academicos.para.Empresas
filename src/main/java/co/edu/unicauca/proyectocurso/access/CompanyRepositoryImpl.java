@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package co.edu.unicauca.proyectocurso.access;
 
 import co.edu.unicauca.proyectocurso.domain.entities.Company;
@@ -12,12 +8,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  *
- * @author yeixongec
+ * @author ibell
  */
 public class CompanyRepositoryImpl implements ICompanyRepository {
-    private List<Company> companies = new ArrayList<>();
 
     @Override
     public boolean save(Company company) {
@@ -70,6 +66,4 @@ public class CompanyRepositoryImpl implements ICompanyRepository {
         }
         return companies;
     }
-    
-
 }

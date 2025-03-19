@@ -12,6 +12,8 @@ import co.edu.unicauca.proyectocurso.domain.entities.ProjectState;
 import co.edu.unicauca.proyectocurso.presentation.GUICoordProyPendientes;
 import co.edu.unicauca.proyectocurso.presentation.GUIRegistrarUsuarios;
 import co.edu.unicauca.proyectocurso.presentation.GUILogin;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 import java.util.UUID;
 import javax.swing.SwingUtilities;
@@ -21,6 +23,7 @@ import javax.swing.SwingUtilities;
  * @author yeixongec
  */
 public class ProyectoEmpresa {
+
     public static void main(String[] args) {
          ProjectRepositoryImpl repository = new ProjectRepositoryImpl();
 
@@ -43,20 +46,14 @@ public class ProyectoEmpresa {
 //
 //       boolean isSaved = repository.save(newProject, empresa.getNit());
 //       System.out.println("✅ Proyecto guardado: " + isSaved);
-
         // 🔹 2. Probar el método findAll()
-       // List<Project> proyectos = repository.findAll();
-       // System.out.println("🔹 Lista de proyectos:");
+        // List<Project> proyectos = repository.findAll();
+        // System.out.println("🔹 Lista de proyectos:");
         //for (Project p : proyectos) {
         //    System.out.println("📌 " + p.getName() + " - " + p.getDescription() + " ID: " + p.getId() + " (Empresa: " + p.getCompany().getName() + ")");
         //}
-        
-        System.out.println("Aplicación iniciada correctamente.");
-        
-       java.awt.EventQueue.invokeLater(() -> new GUILogin().setVisible(true));
+            System.out.println("Aplicación iniciada correctamente.");
+            java.awt.EventQueue.invokeLater(() -> new GUILogin().setVisible(true));
 //        java.awt.EventQueue.invokeLater(() -> new GUICoordProyPendientes().setVisible(true));
-
-
-}  
     }
-    
+}

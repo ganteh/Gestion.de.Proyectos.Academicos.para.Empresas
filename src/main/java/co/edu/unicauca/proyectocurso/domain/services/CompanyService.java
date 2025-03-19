@@ -1,17 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package co.edu.unicauca.proyectocurso.domain.services;
+
 import co.edu.unicauca.proyectocurso.access.ICompanyRepository;
 import co.edu.unicauca.proyectocurso.domain.entities.Company;
 import java.util.List;
 
 /**
  *
- * @author yeixongec
+ * @author ibell
  */
-
 public class CompanyService {
     private ICompanyRepository repository;
 
@@ -37,10 +33,17 @@ public class CompanyService {
         return repository.findAll();
     }
     
+    // Método original que busca por NIT en una lista dada
     public Company findCompanyByNit(List<Company> companies, String nit) {
         return companies.stream()
                 .filter(company -> company.getNit().equals(nit))
                 .findFirst()
                 .orElse(null); // Retorna null si no encuentra coincidencias
+    }
+
+    // Nuevo método sobrecargado que usa el repositorio directamente
+    public Company findCompanyByNit(String nit) {
+        List<Company> companies = repository.findAll();
+        return findCompanyByNit(companies, nit);
     }
 }

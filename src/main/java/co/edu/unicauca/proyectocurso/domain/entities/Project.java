@@ -24,13 +24,16 @@ public class Project {
 
     public Project(String name, String summary, String objectives, String description, int maxMonths, Double budget, Company company) {
         this.id = UUID.randomUUID();
-        this.name = name;
-        this.description = description;
+        this.name = (name != null) ? name : "Proyecto sin nombre";
+        this.description = (description != null) ? description : "Descripción no definida";
         this.date = LocalDate.now();
         this.state = ProjectState.RECEIVED;
         this.company = company;
         this.comments = new ArrayList<>();
         this.students = new ArrayList<>();
+        this.budget = (budget != null) ? budget.floatValue() : 0.0f;
+        this.maxMonths = maxMonths;
+        this.objectives = (objectives != null) ? objectives : "";
     }
 
     public Project() {
