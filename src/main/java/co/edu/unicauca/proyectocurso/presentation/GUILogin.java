@@ -128,17 +128,22 @@ public class GUILogin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Bienvenido, Administrador.");
             GUIAdmin adminGUI = new GUIAdmin();
             adminGUI.setVisible(true);
+            adminGUI.setLocationRelativeTo(null); // Centrar en la pantalla
         } else if (role.equals("Estudiante")) {
             JOptionPane.showMessageDialog(this, "Bienvenido, Estudiante:"+user.getUsername());
             GUIStudent EstudianteGUI = new GUIStudent();
             EstudianteGUI.setVisible(true);
+            EstudianteGUI.setLocationRelativeTo(null); // Centrar en la pantalla
         }else if (role.equals("Coordinador")) {
             JOptionPane.showMessageDialog(this, "Bienvenido, Coordinador: "+user.getUsername());
             GUICoord CoordGUI = new GUICoord();
             CoordGUI.setVisible(true);
+            CoordGUI.setLocationRelativeTo(null); // Centrar en la pantalla
         }else if (role.equals("Empresa")) {
             GUICompany CompanyGUI = new GUICompany();
             CompanyGUI.setVisible(true);
+            CompanyGUI.setLocationRelativeTo(null); // Centrar en la pantalla
+
         }
         this.dispose(); // Cerrar la ventana de login
     } else {

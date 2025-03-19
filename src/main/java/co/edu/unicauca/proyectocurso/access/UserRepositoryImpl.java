@@ -132,6 +132,31 @@ public class UserRepositoryImpl implements IUserRepository {
     }
     return users;
 }
+    public List<User> searchUserss(String name, String role) {
+    List<User> users = new ArrayList<>();
+    String sql = "SELECT * FROM users WHERE username LIKE ? AND role LIKE ?";
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+         stmt.setString(1, "%" + name + "%");
+         // Si se selecciona "Todos" o "Seleccione", no filtrar por rol
+         if (role == null || role.equals("Seleccione") || role.equals("Todos")) {
+             stmt.setString(2, "%");
+         } else {
+             stmt.setString(2, role);
+         }
+         ResultSet rs = stmt.executeQuery();
+         while(rs.next()){
+            users.add(new User(
+                rs.getString("username"),
+                rs.getString("password"),
+                rs.getString("role")
+            ));
+         }
+    } catch (SQLException e) {
+         e.printStackTrace();
+    }
+    return users;
+}
+
     public boolean deleteUser(String username) {
     String sql = "DELETE FROM users WHERE username = ?";
     try (PreparedStatement stmt = conn.prepareStatement(sql)) {

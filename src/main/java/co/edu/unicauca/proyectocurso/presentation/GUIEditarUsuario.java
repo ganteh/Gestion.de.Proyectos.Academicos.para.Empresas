@@ -23,8 +23,11 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
     private List<User> userList; 
     public GUIEditarUsuario() {
         initComponents();
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         setLocationRelativeTo(null);
         userService = new UserService(new UserRepositoryImpl());
+    loadUsers(); // Esto asigna userList y actualiza la tabla
+    setupTableSelectionListener();
     }
 
     /**
@@ -50,6 +53,7 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,6 +73,11 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
         });
 
         cmbRoles.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Empresa", "Estudiante", "Coordinador" }));
+        cmbRoles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbRolesActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Editar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -107,7 +116,7 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
             }
         });
 
-        jTextField1.setText("Nombre ");
+        jTextField1.setText(" ");
         jTextField1.setActionCommand("txtSearch ");
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,8 +134,18 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
             new String [] {
                 "Username", "Rol"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
+
+        jLabel2.setText("Nombre");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -148,7 +167,8 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
                                 .addComponent(jCheckBox1))
                             .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbRoles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,7 +192,9 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(70, 70, 70)
+                        .addGap(48, 48, 48)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton3)
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -256,6 +278,10 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
         userList = userService.searchUsers(criterio);
         loadTable(userList);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void cmbRolesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbRolesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbRolesActionPerformed
     // Método para cargar la tabla con la lista de usuarios
     private void loadTable(List<User> list) {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
@@ -274,45 +300,29 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
         loadTable(userList);
     }
     
-    // Agrega un ActionListener al combobox para actualizar los campos al seleccionar un usuario
 // Agrega un ActionListener al combobox para actualizar los campos al seleccionar un usuario
-    private void setupTableSelectionListener() {
-        jTable1.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
-            if (!e.getValueIsAdjusting() && jTable1.getSelectedRow() != -1) {
-                int row = jTable1.getSelectedRow();
-                txtUserName.setText((String) ((javax.swing.table.DefaultTableModel) jTable1.getModel()).getValueAt(row, 0));
-                cmbRoles.setSelectedItem((String) ((javax.swing.table.DefaultTableModel) jTable1.getModel()).getValueAt(row, 1));
-                // Para la contraseña, obtenemos el usuario completo
-                User u = UserRepositoryImpl.getUser((String) ((javax.swing.table.DefaultTableModel) jTable1.getModel()).getValueAt(row, 0));
-                if(u != null){
-                    txtPassword.setText(u.getPassword());
-                }
+private void setupTableSelectionListener() {
+    jTable1.getSelectionModel().addListSelectionListener(e -> {
+        if (!e.getValueIsAdjusting() && jTable1.getSelectedRow() != -1) {
+            int row = jTable1.getSelectedRow();
+            System.out.println("Fila seleccionada: " + row);
+            String username = (String) ((javax.swing.table.DefaultTableModel) jTable1.getModel()).getValueAt(row, 0);
+            txtUserName.setText(username);
+            cmbRoles.setSelectedItem((String) ((javax.swing.table.DefaultTableModel) jTable1.getModel()).getValueAt(row, 1));
+            // Para la contraseña, obtenemos el usuario completo (asegúrate de que getUser() funcione correctamente)
+            User u = UserRepositoryImpl.getUser(username);
+            if(u != null){
+                txtPassword.setText(u.getPassword());
+            } else {
+                System.out.println("No se encontró el usuario en la base de datos.");
             }
-        });
-    }
+        }
+    });
+}
+
     
     // Acción del botón Editar: actualizar el usuario
-    private void btnEditarActionPerformed(ActionEvent evt) {
-        String username = txtUserName.getText();
-        String password = new String(txtPassword.getPassword());
-        String role = (String) cmbRoles.getSelectedItem();
 
-        // Validar que los campos no estén vacíos (por ejemplo)
-        if (username.isEmpty() || password.isEmpty() || role.equals("Seleccione")) {
-            JOptionPane.showMessageDialog(this, "Por favor complete todos los campos", "Error de validación", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        // Se asume que userService tiene el método updateUser para actualizar datos
-        boolean actualizado = userService.updateUser(username, password, role);
-        if (actualizado) {
-            JOptionPane.showMessageDialog(this, "Usuario actualizado correctamente");
-            loadUsers(); // Recargar la lista para reflejar cambios
-        } else {
-            JOptionPane.showMessageDialog(this, "Error al actualizar el usuario", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
     // Lista para almacenar los usuarios cargados
 
     public static void main(String args[]) {
@@ -333,6 +343,7 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

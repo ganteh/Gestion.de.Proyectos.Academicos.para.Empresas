@@ -41,7 +41,10 @@ public class UserService {
     public List<User> searchUsers(String query) {
         return userRepository.searchUsers(query);
     }
-    
+    public List<User> searchUserss(String name, String role) {
+    return userRepository.searchUserss(name, role);
+}
+
     public boolean deleteUser(String username){
         return userRepository.deleteUser(username);
     }
