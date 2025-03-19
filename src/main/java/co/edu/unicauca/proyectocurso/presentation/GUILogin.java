@@ -111,7 +111,8 @@ public class GUILogin extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-  // Obtener usuario y contraseña
+  this.dispose();
+// Obtener usuario y contraseña
     String username = jTextField1.getText();
     String password = new String(jPasswordField1.getPassword());
 
@@ -120,39 +121,51 @@ public class GUILogin extends javax.swing.JFrame {
     
     // Validar usuario en la base de datos
     String role = userService.validarUsuario(username, password);
-     
+    boolean profileCompleted = userService.isProfileCompleted(username);
     User user = new User(username, password, role );
     
     if (role != null) {
-        if (role.equals("Admin")) {
-            JOptionPane.showMessageDialog(this, "Bienvenido, Administrador.");
-            GUIAdmin adminGUI = new GUIAdmin();
-            adminGUI.setVisible(true);
-            adminGUI.setLocationRelativeTo(null); // Centrar en la pantalla
-        } else if (role.equals("Estudiante")) {
-            JOptionPane.showMessageDialog(this, "Bienvenido, Estudiante:"+user.getUsername());
-            GUIStudent EstudianteGUI = new GUIStudent();
-            EstudianteGUI.setVisible(true);
-            EstudianteGUI.setLocationRelativeTo(null); // Centrar en la pantalla
-        }else if (role.equals("Coordinador")) {
-            JOptionPane.showMessageDialog(this, "Bienvenido, Coordinador: "+user.getUsername());
-            GUICoord CoordGUI = new GUICoord();
-            CoordGUI.setVisible(true);
-            CoordGUI.setLocationRelativeTo(null); // Centrar en la pantalla
-        }else if (role.equals("Empresa")) {
-            GUICompany CompanyGUI = new GUICompany();
-            CompanyGUI.setVisible(true);
-            CompanyGUI.setLocationRelativeTo(null); // Centrar en la pantalla
-
+        // Si el usuario es Empresa o Estudiante y el perfil NO está completado, redirigir a completar el registro.
+        if (!profileCompleted && (role.equals("Empresa") || role.equals("Estudiante"))) {
+            if (role.equals("Empresa")) {
+                // Redirigir a la GUI para que complete el registro de Empresa
+                this.dispose();
+                GUIRegistrarEmpresa guiEmpresa = new GUIRegistrarEmpresa(username, password);
+                guiEmpresa.setVisible(true);
+                boolean actualizado = userService.updateProfileCompleted(username, true);
+            } else if (role.equals("Estudiante")) {
+                // Redirigir a la GUI para que complete el registro de Estudiante
+                this.dispose();
+                GUIRegistrarEstudiante guiEstudiante = new GUIRegistrarEstudiante(username, password);
+                guiEstudiante.setVisible(true);
+                boolean actualizado = userService.updateProfileCompleted(username, true);
+            }
+        } else { 
+            // Si el perfil ya está completado o el rol no es Empresa/Estudiante, redirigir a la GUI principal según el rol.
+            if (role.equals("Admin")) {
+                  this.dispose();
+                JOptionPane.showMessageDialog(this, "Bienvenido, Administrador.");
+                GUIAdmin adminGUI = new GUIAdmin();
+                adminGUI.setVisible(true);
+            } else if (role.equals("Estudiante")) {
+                JOptionPane.showMessageDialog(this, "Bienvenido, Estudiante: " + username);
+                GUIStudent estudianteGUI = new GUIStudent();
+                estudianteGUI.setVisible(true);
+            } else if (role.equals("Coordinador")) {
+                JOptionPane.showMessageDialog(this, "Bienvenido, Coordinador: " + username);
+                GUICoord coordGUI = new GUICoord();
+                coordGUI.setVisible(true);
+            } else if (role.equals("Empresa")) {
+                JOptionPane.showMessageDialog(this, "Bienvenido, Empresa: " + username);
+                GUICompany companyGUI = new GUICompany();
+                companyGUI.setVisible(true);
+            }
         }
-        this.dispose(); // Cerrar la ventana de login
     } else {
         JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
     }    }//GEN-LAST:event_jButton1ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

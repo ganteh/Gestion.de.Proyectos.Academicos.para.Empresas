@@ -48,4 +48,16 @@ public class UserService {
     public boolean deleteUser(String username){
         return userRepository.deleteUser(username);
     }
+    public boolean isProfileCompleted(String username) {
+    // Implementa una consulta que retorne el valor del campo profile_completed para ese usuario.
+    return userRepository.isProfileCompleted(username);
+}
+    public boolean updateProfileCompleted(String username, boolean completed) {
+    return userRepository.updateProfileCompleted(username, completed);
+}
+
+
+
+
+
 }

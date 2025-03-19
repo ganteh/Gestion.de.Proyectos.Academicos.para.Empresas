@@ -25,6 +25,7 @@ public class GUIRegistrarProyecto extends javax.swing.JFrame {
     /**
      * Creates new form GUIRegistrarEmpresa
      */
+    
     private String nitEmpresa;
     private String nombreEmpresa;
 
@@ -37,6 +38,8 @@ public class GUIRegistrarProyecto extends javax.swing.JFrame {
     ProjectService = new ProjectService(new ProjectRepositoryImpl());
     this.nitEmpresa = nit;  // Guardamos el NIT para asociar proyectos a la empresa
     initComponents();
+    setLocationRelativeTo(null);
+
 }
 
 

@@ -168,5 +168,32 @@ public class UserRepositoryImpl implements IUserRepository {
         return false;
     }
 }
-    
+    public boolean isProfileCompleted(String username) {
+    String sql = "SELECT profile_completed FROM users WHERE username = ?";
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+         stmt.setString(1, username);
+         ResultSet rs = stmt.executeQuery();
+         if (rs.next()) {
+             return rs.getBoolean("profile_completed");
+         }
+    } catch (SQLException e) {
+         e.printStackTrace();
+    }
+    return false; // Por defecto, si no se encuentra, se considera que no se completó el perfil.
+}
+    public boolean updateProfileCompleted(String username, boolean completed) {
+    String sql = "UPDATE users SET profile_completed = ? WHERE username = ?";
+    try (Connection conn = DatabaseConnection.getNewConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setBoolean(1, completed);
+        stmt.setString(2, username);
+        int rowsAffected = stmt.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
+
 }

@@ -158,24 +158,6 @@ public class GUIRegistrarUsuarios extends javax.swing.JFrame {
     if (userService.registerUser(username, password, role)) {
         JOptionPane.showMessageDialog(this, "Usuario registrado correctamente");
         
-        // Si el rol es Empresa, abrir la ventana de registro de empresa
-        if(role.equals("Empresa")) {
-            SwingUtilities.invokeLater(() -> {
-                // Aquí pasamos el username y password a la nueva ventana
-                GUIRegistrarEmpresa registroEmpresa = new GUIRegistrarEmpresa(username, password);
-                registroEmpresa.setVisible(true);
-                this.dispose(); // Opcional: cerrar ventana actual
-            });
-        }
-        else if(role.equals("Estudiante"))
-        {
-            SwingUtilities.invokeLater(() -> {
-                // Aquí pasamos el username y password a la nueva ventana
-                GUIRegistrarEstudiante registroEstudiante = new GUIRegistrarEstudiante(username, password);
-                registroEstudiante.setVisible(true);
-                this.dispose(); // Opcional: cerrar ventana actual
-            });
-        }
     } else {
         JOptionPane.showMessageDialog(this, "Error en el registro", 
                                      "Error", JOptionPane.ERROR_MESSAGE);

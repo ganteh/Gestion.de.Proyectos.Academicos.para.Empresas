@@ -5,7 +5,9 @@
 package co.edu.unicauca.proyectocurso.presentation;
 
 import co.edu.unicauca.proyectocurso.access.CompanyRepositoryImpl;
+import co.edu.unicauca.proyectocurso.access.UserRepositoryImpl;
 import co.edu.unicauca.proyectocurso.domain.services.CompanyService;
+import co.edu.unicauca.proyectocurso.domain.services.UserService;
 import javax.swing.JOptionPane;
 /**
  *
@@ -57,6 +59,7 @@ public class GUIRegistrarEmpresa extends javax.swing.JFrame {
         txtApellidoContacto = new javax.swing.JTextField();
         txtCargoContacto = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -89,6 +92,13 @@ public class GUIRegistrarEmpresa extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("Volver");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -98,9 +108,9 @@ public class GUIRegistrarEmpresa extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(132, 132, 132))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel8)
                             .addComponent(jLabel7)
@@ -119,8 +129,10 @@ public class GUIRegistrarEmpresa extends javax.swing.JFrame {
                             .addComponent(txtApellidoContacto, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtCargoContacto, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(121, 121, 121)
-                        .addComponent(jButton1)))
+                        .addGap(27, 27, 27)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -157,7 +169,9 @@ public class GUIRegistrarEmpresa extends javax.swing.JFrame {
                     .addComponent(jLabel8)
                     .addComponent(txtCargoContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
@@ -193,15 +207,24 @@ public class GUIRegistrarEmpresa extends javax.swing.JFrame {
         
         if(resultado) {
             JOptionPane.showMessageDialog(this, "Empresa registrada correctamente");
-        
+                UserService userServiceForUpdate = new UserService(new UserRepositoryImpl());
+                boolean actualizado = userServiceForUpdate.updateProfileCompleted(username, true);
         this.dispose();
-            new GUIRegistrarProyecto(nit).setVisible(true);
+        JOptionPane.showMessageDialog(this, "Bienvenido, Empresa: " + username);
+        GUICompany companyGUI = new GUICompany();
+        companyGUI.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Error al registrar la empresa", 
                                         "Error", JOptionPane.ERROR_MESSAGE);
         }
     
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+                this.dispose();
+                GUILogin LoginGUI = new GUILogin();
+                LoginGUI.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -266,6 +289,7 @@ public class GUIRegistrarEmpresa extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
