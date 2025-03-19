@@ -88,7 +88,7 @@ public class ProjectRepositoryImpl implements IProjectRepository {
 
     @Override
     public boolean update(Project project) {
-    String sql = "UPDATE projects SET name = ?, description = ?, date = ?, state = ?, company_nit = ? WHERE id = ?";
+    String sql = "UPDATE projects SET name = ?, description = ?, date = ?, state = ?, company_nit = ?, objectives = ?, max_months = ?, budget = ? WHERE id = ?";
 
     try (Connection conn = DatabaseConnection.getNewConnection();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -99,6 +99,9 @@ public class ProjectRepositoryImpl implements IProjectRepository {
         pstmt.setString(4, project.getState().toString()); // Enum convertido a String
         pstmt.setString(5, project.getCompany().getNit());
         pstmt.setString(6, project.getId().toString()); // UUID como String
+        pstmt.setString(7, project.getDescription());
+        pstmt.setInt(8, project.getMaxMonths());
+        pstmt.setFloat(9, project.getBudget());
 
         int rowsAffected = pstmt.executeUpdate();
         return rowsAffected > 0; // Retorna true si se actualizó correctamente

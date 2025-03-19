@@ -1,6 +1,7 @@
 
 package co.edu.unicauca.proyectocurso.access;
 import co.edu.unicauca.proyectocurso.domain.entities.Message;
+import co.edu.unicauca.proyectocurso.domain.entities.User;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class MessageRepositoryImpl implements IMessageRepository {
     }
 
     @Override
-    public List<Message> findBySenderAndReceiver(String sender, String receiver) {
+    public List<Message> findBySenderAndReceiver(User sender, User receiver) {
         List<Message> filteredMessages = new ArrayList<>();
         for (Message message : messages) {
             if ((message.getSender().equals(sender) && message.getReceiver().equals(receiver)) ||

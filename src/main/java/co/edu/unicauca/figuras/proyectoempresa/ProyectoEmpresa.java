@@ -28,16 +28,20 @@ public class ProyectoEmpresa {
 //        Company empresa = new Company();
 //        empresa.setNit("123456789"); // NIT existente en la base de datos
 //        empresa.setName("Tech Corp");
+//        
 //
 //        Project newProject = new Project();
 //        newProject.setId(UUID.randomUUID());
 //        newProject.setName("Nuevo Proyecto");
 //        newProject.setDescription("Este es un proyecto de prueba");
 //        newProject.setDate(java.time.LocalDate.now());
-//        newProject.setState(ProjectState.RECEIVED);
-//       newProject.setCompany(empresa);
+//        newProject.setState(ProjectState.IN_EXECUTION);
+//        newProject.setBudget(10000000);
+//        newProject.setMaxMonths(12);
+//        newProject.setObjectives("cagadon");
+//        newProject.setCompany(empresa);
 //
-//        boolean isSaved = repository.save(newProject, empresa.getNit());
+//       boolean isSaved = repository.save(newProject, empresa.getNit());
 //       System.out.println("✅ Proyecto guardado: " + isSaved);
 
         // 🔹 2. Probar el método findAll()
@@ -50,7 +54,7 @@ public class ProyectoEmpresa {
         System.out.println("Aplicación iniciada correctamente.");
         
        java.awt.EventQueue.invokeLater(() -> new GUILogin().setVisible(true));
-        //java.awt.EventQueue.invokeLater(() -> new GUICoordProyPendientes().setVisible(true));
+//        java.awt.EventQueue.invokeLater(() -> new GUICoordProyPendientes().setVisible(true));
 
 
 }  

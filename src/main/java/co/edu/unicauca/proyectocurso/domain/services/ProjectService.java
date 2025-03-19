@@ -39,6 +39,12 @@ public class ProjectService extends Observado {
                 .filter(p -> p.getState() == ProjectState.ACCEPTED)
                 .toList();
     }
+    
+    public List<Project> getInExecutionProjects() {
+        return repository.findAll().stream()
+                .filter(p -> p.getState() == ProjectState.IN_EXECUTION)
+                .toList();
+    }
 
     public void approveProject(Project project) {
         project.setState(ProjectState.ACCEPTED);

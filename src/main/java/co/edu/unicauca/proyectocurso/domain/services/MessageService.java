@@ -2,6 +2,7 @@
 package co.edu.unicauca.proyectocurso.domain.services;
 import co.edu.unicauca.proyectocurso.access.IMessageRepository;
 import co.edu.unicauca.proyectocurso.domain.entities.Message;
+import co.edu.unicauca.proyectocurso.domain.entities.User;
 import java.util.List;
 
 /**
@@ -16,12 +17,12 @@ public class MessageService {
         this.repository = repository;
     }
 
-    public boolean sendMessage(String sender, String receiver, String content) {
+    public boolean sendMessage(User sender, User receiver, String content) {
         Message message = new Message(sender, receiver, content);
         return repository.save(message);
     }
 
-    public List<Message> getConversation(String user1, String user2) {
+    public List<Message> getConversation(User user1, User user2) {
         return repository.findBySenderAndReceiver(user1, user2);
     }
 }

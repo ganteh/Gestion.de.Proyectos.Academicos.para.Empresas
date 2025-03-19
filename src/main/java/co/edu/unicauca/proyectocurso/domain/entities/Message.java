@@ -10,16 +10,26 @@ package co.edu.unicauca.proyectocurso.domain.entities;
  */
 public class Message {
 
-    public Message(String sender, String receiver, String content) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+   private User sender; 
+   private User receiver;
+   private String content;
+   
 
-    public Object getSender() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Message(User sender, User receiver, String content) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.content = content;
     }
+    
+    public User getSender() {return sender;}
+    public void setSender(User sender) {this.sender = sender;}
 
-    public Object getReceiver() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public User getReceiver() {return receiver;}
+    public void setReceiver(User receiver) {this.receiver = receiver;}
+
+    public String getContent() {return content;}
+    public void setContent(String content) {this.content = content;}
+
+
     
 }

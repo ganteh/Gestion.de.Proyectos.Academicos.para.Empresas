@@ -1,6 +1,7 @@
 
 package co.edu.unicauca.proyectocurso.access;
 import co.edu.unicauca.proyectocurso.domain.entities.Message;
+import co.edu.unicauca.proyectocurso.domain.entities.User;
 import java.util.List;
 /**
  *
@@ -10,5 +11,5 @@ import java.util.List;
 
 public interface IMessageRepository {
     boolean save(Message message);
-    List<Message> findBySenderAndReceiver(String sender, String receiver);
+    List<Message> findBySenderAndReceiver(User sender, User receiver);
 }
