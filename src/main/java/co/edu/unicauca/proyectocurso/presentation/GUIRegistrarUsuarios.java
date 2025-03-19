@@ -167,6 +167,15 @@ public class GUIRegistrarUsuarios extends javax.swing.JFrame {
                 this.dispose(); // Opcional: cerrar ventana actual
             });
         }
+        else if(role.equals("Estudiante"))
+        {
+            SwingUtilities.invokeLater(() -> {
+                // Aquí pasamos el username y password a la nueva ventana
+                GUIRegistrarEstudiante registroEstudiante = new GUIRegistrarEstudiante(username, password);
+                registroEstudiante.setVisible(true);
+                this.dispose(); // Opcional: cerrar ventana actual
+            });
+        }
     } else {
         JOptionPane.showMessageDialog(this, "Error en el registro", 
                                      "Error", JOptionPane.ERROR_MESSAGE);
