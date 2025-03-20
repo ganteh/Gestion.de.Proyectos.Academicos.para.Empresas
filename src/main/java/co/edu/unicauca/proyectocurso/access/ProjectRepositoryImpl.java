@@ -124,5 +124,36 @@ public class ProjectRepositoryImpl implements IProjectRepository {
             return false;
         }
     }
+    @Override
+     public List<Project> findProjectsByCompanyNIT(String nit) {
+        List<Project> projects = new ArrayList<>();
+        String sql = "SELECT id, name, description, budget, max_months FROM projects WHERE company_nit = ?";
+
+        try (Connection conn = DatabaseConnection.getNewConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, nit);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Project project = new Project();
+                project.setId(UUID.fromString(rs.getString("id")));
+                project.setName(rs.getString("name"));
+                project.setDescription(rs.getString("description"));
+                project.setBudget(rs.getFloat("budget"));
+                project.setMaxMonths(rs.getInt("maxMonths"));
+
+                projects.add(project);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("❌ Error al obtener proyectos por NIT.");
+        }
+
+        return projects;
+    }
+
+
+    
  
 }

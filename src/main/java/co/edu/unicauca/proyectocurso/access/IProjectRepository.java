@@ -30,7 +30,7 @@ public interface IProjectRepository {
      */
     public boolean update(Project project);
 
-    
+    public List<Project> findProjectsByCompanyNIT(String nit);
 
     boolean delete(UUID projectId);
 }
