@@ -251,6 +251,24 @@ public class StudentRepositoryImpl implements IStudentRepository {
             }
         }
     }
+    public boolean isStudentAlreadyApplied(String studentId, String projectId) {
+    String sql = "SELECT COUNT(*) FROM student_projects WHERE student_id = ? AND project_id = ?";
+    
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, studentId);
+        stmt.setString(2, projectId);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            return rs.getInt(1) > 0; // Devuelve true si ya existe la postulación
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+
+
    
 
 
