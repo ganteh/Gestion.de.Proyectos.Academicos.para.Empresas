@@ -149,7 +149,7 @@ public class GUILogin extends javax.swing.JFrame {
                 adminGUI.setVisible(true);
             } else if (role.equals("Estudiante")) {
                 JOptionPane.showMessageDialog(this, "Bienvenido, Estudiante: " + username);
-                GUIStudent estudianteGUI = new GUIStudent();
+                GUIStudent estudianteGUI = new GUIStudent(username);
                 estudianteGUI.setVisible(true);
             } else if (role.equals("Coordinador")) {
                 JOptionPane.showMessageDialog(this, "Bienvenido, Coordinador: " + username);

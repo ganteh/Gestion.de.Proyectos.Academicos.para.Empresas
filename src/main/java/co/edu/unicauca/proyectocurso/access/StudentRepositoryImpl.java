@@ -3,16 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package co.edu.unicauca.proyectocurso.access;
-import static co.edu.unicauca.proyectocurso.access.DatabaseConnection.getNewConnection;
+
+import co.edu.unicauca.proyectocurso.domain.entities.Project;
 import co.edu.unicauca.proyectocurso.domain.entities.Student;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author yeixongec
- */
 public class StudentRepositoryImpl implements IStudentRepository {
 
     private Connection conn;
@@ -25,7 +22,6 @@ public class StudentRepositoryImpl implements IStudentRepository {
      * Guarda los datos del estudiante vinculándolo con un usuario ya registrado
      * en `users`.
      */
-    
     @Override
     public boolean save(Student student) {
         String getUserIdSql = "SELECT id FROM users WHERE username = ? AND role = 'Estudiante'";
@@ -46,11 +42,11 @@ public class StudentRepositoryImpl implements IStudentRepository {
                     studentStmt.setString(3, student.getFirstName());
                     studentStmt.setString(4, student.getLastName());
                     studentStmt.setString(5, student.getProgram());
-                     // Si el project_id es "null" como string, pasamos un valor NULL real
-                    if (student.getProjectID().equalsIgnoreCase("null")) {
-                    studentStmt.setNull(6, java.sql.Types.VARCHAR);
+                    // Si el project_id es "null" como string, pasamos un valor NULL real
+                    if (student.getProjectID() == null || student.getProjectID().equalsIgnoreCase("null")) {
+                        studentStmt.setNull(6, java.sql.Types.VARCHAR);
                     } else {
-                    studentStmt.setString(6, student.getProjectID());
+                        studentStmt.setString(6, student.getProjectID());
                     }
                     return studentStmt.executeUpdate() > 0;
                 }
@@ -63,9 +59,12 @@ public class StudentRepositoryImpl implements IStudentRepository {
         }
         return false;
     }
-    // Método para registrar estudiante
+
+    /**
+     * Método para registrar estudiante
+     */
     public boolean registerStudent(String username, String password, String firstName, String lastName, String program, String project_id) {
-        return save(new Student(username, password, firstName, lastName,program ,project_id));
+        return save(new Student(username, password, firstName, lastName, program, project_id));
     }
 
     /**
@@ -73,25 +72,43 @@ public class StudentRepositoryImpl implements IStudentRepository {
      */
     public Student findByUsername(String username) {
         String sql = """
-            SELECT u.username, u.password, s.first_name, s.last_name
+            SELECT u.username, u.password, s.id, s.first_name, s.last_name, s.program, s.project_id
             FROM users u
             JOIN students s ON u.id = s.user_id
             WHERE u.username = ?;
         """;
-
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
                 return new Student(
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("first_name"),
-                        rs.getString("last_name"),
-                        rs.getString("program"),
-                        rs.getString("project_id")
+                    rs.getString("id"),
+                    rs.getString("username"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("program"),
+                    rs.getString("project_id")
                 );
+            }
+            return null; // Retorna null si no se encuentra el estudiante
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null; // Manejar la excepción adecuadamente
+        }
+    }
+
+    /**
+     * Obtiene el ID del estudiante por su nombre de usuario
+     */
+    public String getStudentIdByUsername(String username) {
+        String sql = "SELECT s.id FROM students s JOIN users u ON s.user_id = u.id WHERE u.username = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String studentId = rs.getString("id");
+                System.out.println("ID del estudiante encontrado: [" + studentId + "]");
+                return studentId;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -99,18 +116,21 @@ public class StudentRepositoryImpl implements IStudentRepository {
         return null;
     }
 
-    
-    
     @Override
     public List<Student> findAll() {
         List<Student> students = new ArrayList<>();
-        String sql = "SELECT * FROM students";
+        String sql = """
+            SELECT s.id, u.username, u.password, s.first_name, s.last_name, s.program, s.project_id
+            FROM students s
+            JOIN users u ON s.user_id = u.id
+        """;
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 students.add(new Student(
+                    rs.getString("id"),
                     rs.getString("username"),
-                    rs.getString("password"),
+                    
                     rs.getString("first_name"),
                     rs.getString("last_name"),
                     rs.getString("program"),
@@ -122,12 +142,17 @@ public class StudentRepositoryImpl implements IStudentRepository {
         }
         return students;
     }
-    // Método para verificar si un estudiante existe
+
+    /**
+     * Método para verificar si un estudiante existe
+     */
     public boolean estudanteExists(String username) {
-        String sql = "SELECT 1 " +
-"        FROM users u" +
-"        JOIN students s ON u.id = s.user_id" +
-"        WHERE u.username = ?";
+        String sql = """
+            SELECT 1
+            FROM users u
+            JOIN students s ON u.id = s.user_id
+            WHERE u.username = ?
+        """;
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
@@ -137,8 +162,100 @@ public class StudentRepositoryImpl implements IStudentRepository {
         }
         return false;
     }
-    
+
+    /**
+     * Obtiene todos los proyectos disponibles
+     */
+    public List<Object[]> findAvailableProjects() {
+        List<Object[]> projects = new ArrayList<>();
+        String sql = """
+            SELECT p.id AS project_id, p.date, e.name AS company_name,
+               p.name AS project_name, p.description
+               FROM projects p
+               JOIN companies e ON p.company_nit = e.nit
+                WHERE p.state = 'RECEIVED'
+            """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                projects.add(new Object[]{
+                    rs.getString("project_id"),
+                    rs.getDate("date"),
+                    rs.getString("company_name"),
+                    rs.getString("project_name"),
+                    rs.getString("description")
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return projects;
+    }
+
+    /**
+     * Inserta una relación entre estudiante y proyecto usando una transacción
+     */
+    public boolean insertStudentProject(String studentId, String projectId, String status) {
+        try {
+            conn.setAutoCommit(false);
+            
+            // Primero verifica si el estudiante existe
+            String checkSql = "SELECT 1 FROM students WHERE id = ?";
+            try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
+                checkStmt.setString(1, studentId);
+                ResultSet rs = checkStmt.executeQuery();
+                if (!rs.next()) {
+                    System.out.println("El estudiante con ID [" + studentId + "] no existe");
+                    conn.rollback();
+                    return false;
+                }
+            }
+            
+            // Luego verifica si el proyecto existe
+            String checkProjectSql = "SELECT 1 FROM projects WHERE id = ?";
+            try (PreparedStatement checkProjStmt = conn.prepareStatement(checkProjectSql)) {
+                checkProjStmt.setString(1, projectId);
+                ResultSet rs = checkProjStmt.executeQuery();
+                if (!rs.next()) {
+                    System.out.println("El proyecto con ID [" + projectId + "] no existe");
+                    conn.rollback();
+                    return false;
+                }
+            }
+            
+            // Si ambos existen, haz la inserción
+            String insertSql = "INSERT INTO student_projects (student_id, project_id, status) VALUES (?, ?, ?)";
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+                insertStmt.setString(1, studentId);
+                insertStmt.setString(2, projectId);
+                insertStmt.setString(3, status);
+                int result = insertStmt.executeUpdate();
+                conn.commit();
+                return result > 0;
+            }
+        } catch (SQLException e) {
+            try {
+                conn.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+   
+
+
+    @Override
     public boolean update(Student student) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

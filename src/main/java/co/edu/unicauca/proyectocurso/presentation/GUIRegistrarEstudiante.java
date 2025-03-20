@@ -158,7 +158,7 @@ public class GUIRegistrarEstudiante extends javax.swing.JFrame {
         }
         this.dispose();
         JOptionPane.showMessageDialog(this, "Bienvenido, Estudiante: " + username);
-        GUIStudent estudianteGUI = new GUIStudent();
+        GUIStudent estudianteGUI = new GUIStudent(username);
         estudianteGUI.setVisible(true);
     }//GEN-LAST:event_btnGuardarActionPerformed
 
