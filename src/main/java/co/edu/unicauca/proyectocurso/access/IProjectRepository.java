@@ -2,6 +2,7 @@ package co.edu.unicauca.proyectocurso.access;
 
 import co.edu.unicauca.proyectocurso.domain.entities.Project;
 import java.util.List;
+import java.util.UUID;
 
 public interface IProjectRepository {
     /**
@@ -24,4 +25,6 @@ public interface IProjectRepository {
      * @return True si el proyecto se actualizo correctamente, en caso contrario False
      */
     public boolean update(Project project);
+    
+     boolean delete(UUID projectId); 
 }

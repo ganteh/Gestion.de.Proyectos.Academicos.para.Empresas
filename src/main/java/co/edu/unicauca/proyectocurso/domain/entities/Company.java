@@ -30,7 +30,13 @@ public class Company extends User {
         this.contactLastName = contactLastName;
         this.contactPosition = contactPosition;
         this.projects = new ArrayList<>();
-    }   
+    } 
+    // Constructor con NIT
+    public Company(String nit) {
+        super("default@empresa.com", "password123", "Empresa"); // Valores por defecto
+        this.nit = nit;
+        // Inicializa otros campos si es necesario
+    }
     
     //Constructor genérico con valores predeterminados
     public Company() {

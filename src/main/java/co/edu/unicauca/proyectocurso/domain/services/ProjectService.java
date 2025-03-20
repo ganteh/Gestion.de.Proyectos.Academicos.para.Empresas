@@ -4,7 +4,9 @@ import co.edu.unicauca.proyectocurso.access.IProjectRepository;
 import co.edu.unicauca.proyectocurso.access.ProjectRepositoryImpl;
 import co.edu.unicauca.proyectocurso.domain.entities.Project;
 import co.edu.unicauca.proyectocurso.domain.entities.ProjectState;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 public class ProjectService extends Observado {
     private IProjectRepository repository = new ProjectRepositoryImpl(); ;
@@ -17,11 +19,28 @@ public class ProjectService extends Observado {
         
     }
 
-    public boolean registerProject(Project project, String nitEmpresa) {
-        if (project == null || nitEmpresa == null || nitEmpresa.isBlank()) {
+    public boolean registerProject(String name, String summary, String objectives,
+            String description, int maxMonths, float budget,
+            LocalDate dueDate, String companyNIT) {
+        // Validaciones
+        if (name == null || name.isBlank()
+                || description == null || description.isBlank()
+                || maxMonths <= 0 || budget <= 0) {
             return false;
         }
-        return repository.save(project, nitEmpresa);
+
+        Project project = new Project(
+                name, // Sin "String"
+                summary,
+                objectives,
+                description,
+                maxMonths,
+                budget,
+                dueDate,
+                companyNIT
+        );
+
+        return repository.save(project, companyNIT);
     }
 
     public List<Project> listProjects() {
@@ -44,6 +63,13 @@ public class ProjectService extends Observado {
         return repository.findAll().stream()
                 .filter(p -> p.getState() == ProjectState.IN_EXECUTION)
                 .toList();
+    }
+
+    public boolean validateProject(Project project) {
+        return !project.getName().isBlank()
+                && !project.getDescription().isBlank()
+                && project.getBudget() > 0
+                && project.getMaxMonths() > 0;
     }
 
     public void approveProject(Project project) {

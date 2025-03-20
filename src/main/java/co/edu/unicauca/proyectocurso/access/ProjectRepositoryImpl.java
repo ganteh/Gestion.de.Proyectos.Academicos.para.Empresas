@@ -106,4 +106,22 @@ public class ProjectRepositoryImpl implements IProjectRepository {
             return false;
         }
     }
+
+    /**
+     *
+     * @param projectId
+     * @return
+     */
+    @Override
+    public boolean delete(UUID projectId) {
+        String sql = "DELETE FROM projects WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getNewConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, projectId.toString());
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar el proyecto: " + e.getMessage());
+            return false;
+        }
+    }
 }

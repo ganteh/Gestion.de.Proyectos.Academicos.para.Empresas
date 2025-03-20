@@ -1,6 +1,7 @@
 package co.edu.unicauca.proyectocurso.domain.entities;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,16 +23,18 @@ public class Project {
     private int maxMonths;
     private String objectives;
 
-    public Project(String name, String summary, String objectives, String description, int maxMonths, Double budget, Company company) {
+    public Project(String name, String summary, String objectives, String description,
+            int maxMonths, float budget, LocalDate dueDate, String companyNIT) {
         this.id = UUID.randomUUID();
         this.name = (name != null) ? name : "Proyecto sin nombre";
         this.description = (description != null) ? description : "Descripción no definida";
-        this.date = LocalDate.now();
+        this.date = LocalDate.now(); // Fecha de creación
+        this.FinalizationDate = dueDate != null ? Date.from(dueDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null; // Fecha de finalización
         this.state = ProjectState.RECEIVED;
-        this.company = company;
+        this.company = new Company(companyNIT); // Asume que Company tiene un constructor con NIT
         this.comments = new ArrayList<>();
         this.students = new ArrayList<>();
-        this.budget = (budget != null) ? budget.floatValue() : 0.0f;
+        this.budget = budget;
         this.maxMonths = maxMonths;
         this.objectives = (objectives != null) ? objectives : "";
     }
