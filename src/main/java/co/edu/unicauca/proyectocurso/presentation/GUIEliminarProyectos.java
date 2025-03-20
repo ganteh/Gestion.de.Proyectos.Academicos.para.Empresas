@@ -51,11 +51,9 @@ public class GUIEliminarProyectos extends javax.swing.JFrame {
 
         jLabel1.setText("Eliminar Proyecto");
 
-        jLabel2.setText("jLabel2");
+        jLabel2.setText("Nit Empresa:");
 
-        txtNIT.setText("jTextField1");
-
-        jButton1.setText("jButton1");
+        jButton1.setText("Buscar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -102,8 +100,8 @@ public class GUIEliminarProyectos extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtNIT, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(50, 50, 50)
+                                .addComponent(txtNIT, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(33, 33, 33)
                                 .addComponent(jButton1)))
                         .addGap(66, 66, 66))))
         );

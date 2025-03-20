@@ -9,7 +9,7 @@ import java.util.List;
  * @author ibell
  */
 public class CompanyService {
-    private ICompanyRepository repository;
+    private final ICompanyRepository repository;
 
     public CompanyService(ICompanyRepository repository) {
         this.repository = repository;
@@ -46,4 +46,8 @@ public class CompanyService {
         List<Company> companies = repository.findAll();
         return findCompanyByNit(companies, nit);
     }
+    public boolean existsCompanyNIT(String nit) {
+        return repository.existsCompanyNIT(nit);
+    }
+
 }

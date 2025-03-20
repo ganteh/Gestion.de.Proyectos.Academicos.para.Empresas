@@ -4,11 +4,16 @@
  */
 package co.edu.unicauca.proyectocurso.presentation;
 
+import co.edu.unicauca.proyectocurso.access.CompanyRepositoryImpl;
 import co.edu.unicauca.proyectocurso.access.DatabaseConnection;
 import co.edu.unicauca.proyectocurso.access.ProjectRepositoryImpl;
 import co.edu.unicauca.proyectocurso.domain.entities.Project;
+import co.edu.unicauca.proyectocurso.domain.services.CompanyService;
 import co.edu.unicauca.proyectocurso.domain.services.ProjectService;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -27,6 +32,13 @@ public class GUIActualizarProyectos extends javax.swing.JFrame {
      */
     public GUIActualizarProyectos() {
         initComponents();
+        // Listener para selección de filas
+    tableProyectos.getSelectionModel().addListSelectionListener(e -> {
+        int fila = tableProyectos.getSelectedRow();
+        if (fila != -1) {
+            cargarDatosProyecto(fila);
+        }
+    });
     }
 
     /**
@@ -240,38 +252,78 @@ public class GUIActualizarProyectos extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+private void cargarDatosProyecto(int fila) {
+        txtNombre.setText(tableProyectos.getValueAt(fila, 1).toString());
+        txtResumen.setText(tableProyectos.getValueAt(fila, 2).toString());
+        txtDescripcion.setText(tableProyectos.getValueAt(fila, 3).toString());
+        spnPresupuesto.setValue(tableProyectos.getValueAt(fila, 4));
+        spnTiempoMaximo.setValue(tableProyectos.getValueAt(fila, 5));
+        txtFecha.setText(tableProyectos.getValueAt(fila, 6).toString());
+    }
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        try {
-            int filaSeleccionada = tableProyectos.getSelectedRow();
-            if (filaSeleccionada == -1) {
-                JOptionPane.showMessageDialog(this, "Seleccione un proyecto para editar", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            UUID idProyecto = (UUID) tableProyectos.getValueAt(filaSeleccionada, 0);
-            String nombre = txtNombre.getText().trim();
-            String descripcion = txtDescripcion.getText().trim();
-            String objetivos = txtObjetivos.getText().trim();
-            
-            Project proyectoEditado = new Project();
-            proyectoEditado.setId(idProyecto);
-            proyectoEditado.setName(nombre);
-            proyectoEditado.setDescription(descripcion);
-            proyectoEditado.setObjectives(objetivos);
-            
-            ProjectRepositoryImpl repo = new ProjectRepositoryImpl(DatabaseConnection.getNewConnection());
-            boolean actualizado = repo.update(proyectoEditado);
-            
-            if (actualizado) {
-                JOptionPane.showMessageDialog(this, "Proyecto actualizado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                btnBuscarActionPerformed(null); // Recargar la tabla
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al actualizar el proyecto", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(GUIActualizarProyectos.class.getName()).log(Level.SEVERE, null, ex);
+         try {
+        int filaSeleccionada = tableProyectos.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un proyecto", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+
+        // Obtener datos del formulario
+        UUID idProyecto = (UUID) tableProyectos.getValueAt(filaSeleccionada, 0);
+        String nombre = txtNombre.getText().trim();
+        String resumen = txtResumen.getText().trim();
+        String objetivos = txtObjetivos.getText().trim();
+        String descripcion = txtDescripcion.getText().trim();
+        int tiempoMaximo = (int) spnTiempoMaximo.getValue();
+        float presupuesto = ((Number) spnPresupuesto.getValue()).floatValue();
+        String fechaStr = txtFecha.getText().trim();
+
+        // Validar campos obligatorios
+        if (nombre.isEmpty() || resumen.isEmpty() || objetivos.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Complete campos obligatorios (*)", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validar formato de fecha (dd/MM/yyyy)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate fecha = LocalDate.parse(fechaStr, formatter);
+
+        // Crear objeto actualizado
+        Project proyecto = new Project();
+        proyecto.setId(idProyecto);
+        proyecto.setName(nombre);
+        proyecto.setSummary(resumen);
+        proyecto.setObjectives(objetivos);
+        proyecto.setDescription(descripcion);
+        proyecto.setMaxMonths(tiempoMaximo);
+        proyecto.setBudget(presupuesto);
+        proyecto.setDate(fecha);
+
+        // Actualizar en BD
+        ProjectService service = new ProjectService(new ProjectRepositoryImpl());
+        boolean exito = service.updateProject (proyecto);
+
+        if (exito) {
+            JOptionPane.showMessageDialog(this, "¡Proyecto actualizado!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            btnBuscarActionPerformed(null); // Recargar tabla
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al guardar", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    } catch (DateTimeParseException e) {
+        JOptionPane.showMessageDialog(this, 
+            "Formato de fecha inválido. Use dd/MM/yyyy", 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE
+        );
+    } catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error: " + e.getMessage(), 
+            "Error", 
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
@@ -284,18 +336,40 @@ public class GUIActualizarProyectos extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         String nit = txtNIT.getText().trim();
-        if (nit.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ingrese un NIT válido", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    
+    // Validar formato del NIT
+    if (nit.isEmpty() || !nit.matches("\\d+")) {
+        JOptionPane.showMessageDialog(this, "NIT inválido. Solo números.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        //List<Project> proyectos = ProjectService.buscarProyectosPorNIT(nit);
-        DefaultTableModel model = (DefaultTableModel) tableProyectos.getModel();
-        model.setRowCount(0); // Limpiar la tabla antes de cargar nuevos datos
+    // Validar existencia de la empresa
+    CompanyService companyService = new CompanyService(new CompanyRepositoryImpl());
+    if (!companyService.existsCompanyNIT(nit)) {
+        JOptionPane.showMessageDialog(this, "La empresa no está registrada", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        //for (Project p : proyectos) {
-          //  model.addRow(new Object[]{p.getId(), p.getName(), p.getDescription(), p.getObjectives()});
-        //}
+    // Buscar proyectos si la empresa existe
+    ProjectService service = new ProjectService(new ProjectRepositoryImpl());
+    List<Project> proyectos = service.findProjectsByCompanyNIT(nit);
+
+    // Actualizar tabla
+    DefaultTableModel model = (DefaultTableModel) tableProyectos.getModel();
+    model.setRowCount(0);
+    model.setColumnIdentifiers(new Object[]{"ID", "Nombre", "Resumen", "Descripción", "Presupuesto", "Meses", "Fecha"});
+
+    for (Project p : proyectos) {
+        model.addRow(new Object[]{
+            p.getId(),
+            p.getName(),
+            p.getSummary(),
+            p.getDescription(),
+            p.getBudget(),
+            p.getMaxMonths(),
+            p.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        });
+    }
 
     }//GEN-LAST:event_btnBuscarActionPerformed
 

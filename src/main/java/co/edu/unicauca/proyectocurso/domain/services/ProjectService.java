@@ -160,6 +160,21 @@ public class ProjectService extends Observado {
         }
     }
     public List<Project> findProjectsByCompanyNIT(String nit) {
-    return repository.findProjectsByCompanyNIT(nit);
-}
+        return repository.findProjectsByCompanyNIT(nit);
+    }
+    
+    public boolean updateProject(Project project) {
+        // Validaciones adicionales (opcional)
+        if (project == null || project.getId() == null) {
+            System.err.println("Error: Proyecto inválido para actualizar");
+            return false;
+        }
+
+        try {
+            return repository.update(project); // Llama al método del repositorio
+        } catch (Exception e) {
+            System.err.println("Error en el servicio al actualizar proyecto: " + e.getMessage());
+            return false;
+        }
+    }
 }

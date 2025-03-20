@@ -22,11 +22,13 @@ public class Project {
     private float budget;
     private int maxMonths;
     private String objectives;
+    private String summary;
 
     public Project(String name, String summary, String objectives, String description,
             int maxMonths, float budget, LocalDate dueDate, String companyNIT) {
         this.id = UUID.randomUUID();
         this.name = (name != null) ? name : "Proyecto sin nombre";
+        this.summary = summary; 
         this.description = (description != null) ? description : "Descripción no definida";
         this.date = LocalDate.now(); // Fecha de creación
         this.FinalizationDate = dueDate != null ? Date.from(dueDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null; // Fecha de finalización
@@ -81,6 +83,7 @@ public class Project {
         this.name = name;
     }
 
+    
     public String getDescription() {
         return description;
     }
@@ -168,4 +171,8 @@ public class Project {
     public void setObjectives(String objectives) {
         this.objectives = objectives;
     }
+    // Getter y Setter
+    public String getSummary() { return summary; }
+    public void setSummary(String summary) { this.summary = summary; }
+
 }

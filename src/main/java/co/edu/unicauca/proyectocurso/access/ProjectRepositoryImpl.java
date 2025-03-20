@@ -6,6 +6,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProjectRepositoryImpl implements IProjectRepository {
     
@@ -19,20 +21,22 @@ public class ProjectRepositoryImpl implements IProjectRepository {
 
     @Override
     public boolean save(Project project, String nitEmpresa) {
-        String sql = "INSERT INTO projects (id, name, description, date, state, company_nit, budget, max_months, objectives) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // Añadir el campo 'summary' en la consulta SQL
+        String sql = "INSERT INTO projects (id, name, summary, description, date, state, company_nit, budget, max_months, objectives) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; // 10 parámetros
 
-        try (Connection conn = DatabaseConnection.getNewConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-           
+        try (Connection conn = DatabaseConnection.getNewConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
             pstmt.setString(1, project.getId().toString());
             pstmt.setString(2, project.getName());
-            pstmt.setString(3, project.getDescription());
-            pstmt.setDate(4, Date.valueOf(project.getDate()));
-            pstmt.setString(5, project.getState().toString());
-            pstmt.setString(6, nitEmpresa);
-            pstmt.setFloat(7, project.getBudget());
-            pstmt.setInt(8, project.getMaxMonths());
-            pstmt.setString(9, project.getObjectives());
+            pstmt.setString(3, project.getSummary()); // Nuevo campo
+            pstmt.setString(4, project.getDescription());
+            pstmt.setDate(5, Date.valueOf(project.getDate()));
+            pstmt.setString(6, project.getState().toString());
+            pstmt.setString(7, nitEmpresa);
+            pstmt.setFloat(8, project.getBudget());
+            pstmt.setInt(9, project.getMaxMonths());
+            pstmt.setString(10, project.getObjectives());
 
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0;
@@ -83,20 +87,21 @@ public class ProjectRepositoryImpl implements IProjectRepository {
 
     @Override
     public boolean update(Project project) {
-        String sql = "UPDATE projects SET name = ?, description = ?, date = ?, state = ?, company_nit = ?, budget = ?, max_months = ?, objectives = ? WHERE id = ?";
+        // Añadir el campo 'summary' en la consulta SQL
+        String sql = "UPDATE projects SET name = ?, summary = ?, description = ?, date = ?, state = ?, company_nit = ?, budget = ?, max_months = ?, objectives = ? WHERE id = ?";
 
-        try (Connection conn = DatabaseConnection.getNewConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DatabaseConnection.getNewConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, project.getName());
-            pstmt.setString(2, project.getDescription());
-            pstmt.setDate(3, Date.valueOf(project.getDate()));
-            pstmt.setString(4, project.getState().toString());
-            pstmt.setString(5, project.getCompany() != null ? project.getCompany().getNit() : null);
-            pstmt.setFloat(6, project.getBudget());
-            pstmt.setInt(7, project.getMaxMonths());
-            pstmt.setString(8, project.getObjectives());
-            pstmt.setString(9, project.getId().toString());
+            pstmt.setString(2, project.getSummary()); // Nuevo campo
+            pstmt.setString(3, project.getDescription());
+            pstmt.setDate(4, Date.valueOf(project.getDate()));
+            pstmt.setString(5, project.getState().toString());
+            pstmt.setString(6, project.getCompany() != null ? project.getCompany().getNit() : null);
+            pstmt.setFloat(7, project.getBudget());
+            pstmt.setInt(8, project.getMaxMonths());
+            pstmt.setString(9, project.getObjectives());
+            pstmt.setString(10, project.getId().toString()); // ID ahora es el parámetro 10
 
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0;
@@ -125,9 +130,10 @@ public class ProjectRepositoryImpl implements IProjectRepository {
         }
     }
     @Override
-     public List<Project> findProjectsByCompanyNIT(String nit) {
+    public List<Project> findProjectsByCompanyNIT(String nit) {
         List<Project> projects = new ArrayList<>();
-        String sql = "SELECT id, name, description, budget, max_months FROM projects WHERE company_nit = ?";
+        // Añadir el campo "summary" en la consulta SQL
+        String sql = "SELECT id, name, summary, description, budget, max_months FROM projects WHERE company_nit = ?";
 
         try (Connection conn = DatabaseConnection.getNewConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -138,20 +144,21 @@ public class ProjectRepositoryImpl implements IProjectRepository {
                 Project project = new Project();
                 project.setId(UUID.fromString(rs.getString("id")));
                 project.setName(rs.getString("name"));
+                project.setSummary(rs.getString("summary")); // Nuevo campo
                 project.setDescription(rs.getString("description"));
                 project.setBudget(rs.getFloat("budget"));
-                project.setMaxMonths(rs.getInt("maxMonths"));
+                project.setMaxMonths(rs.getInt("max_months"));
 
                 projects.add(project);
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("❌ Error al obtener proyectos por NIT.");
+            Logger.getLogger(ProjectRepositoryImpl.class.getName()).log(Level.SEVERE, "Error al obtener proyectos por NIT", e);
         }
 
         return projects;
     }
+
 
 
     
