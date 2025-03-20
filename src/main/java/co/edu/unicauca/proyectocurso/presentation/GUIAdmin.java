@@ -15,6 +15,7 @@ public class GUIAdmin extends javax.swing.JFrame {
      */
     public GUIAdmin() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**

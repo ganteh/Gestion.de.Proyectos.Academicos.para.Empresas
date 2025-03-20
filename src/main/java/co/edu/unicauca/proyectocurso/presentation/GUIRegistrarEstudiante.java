@@ -24,7 +24,7 @@ public class GUIRegistrarEstudiante extends javax.swing.JFrame {
         
         
         StudentService = new StudentService(new StudentRepositoryImpl());
-        
+        setLocationRelativeTo(null);
         initComponents();
     }
 

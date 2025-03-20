@@ -111,7 +111,6 @@ public class GUILogin extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-  this.dispose();
 // Obtener usuario y contraseña
     String username = jTextField1.getText();
     String password = new String(jPasswordField1.getPassword());
@@ -148,14 +147,17 @@ public class GUILogin extends javax.swing.JFrame {
                 GUIAdmin adminGUI = new GUIAdmin();
                 adminGUI.setVisible(true);
             } else if (role.equals("Estudiante")) {
+                this.dispose();
                 JOptionPane.showMessageDialog(this, "Bienvenido, Estudiante: " + username);
                 GUIStudent estudianteGUI = new GUIStudent(username);
                 estudianteGUI.setVisible(true);
             } else if (role.equals("Coordinador")) {
+                this.dispose();
                 JOptionPane.showMessageDialog(this, "Bienvenido, Coordinador: " + username);
                 GUICoord coordGUI = new GUICoord();
                 coordGUI.setVisible(true);
             } else if (role.equals("Empresa")) {
+                this.dispose();
                 JOptionPane.showMessageDialog(this, "Bienvenido, Empresa: " + username);
                 GUICompany companyGUI = new GUICompany();
                 companyGUI.setVisible(true);

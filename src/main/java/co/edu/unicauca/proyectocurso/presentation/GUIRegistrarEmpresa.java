@@ -32,6 +32,8 @@ public class GUIRegistrarEmpresa extends javax.swing.JFrame {
         companyService = new CompanyService(new CompanyRepositoryImpl());
         
         initComponents();
+        setLocationRelativeTo(null);
+
     }
 
     /**
