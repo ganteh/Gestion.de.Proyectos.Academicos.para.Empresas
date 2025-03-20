@@ -18,7 +18,8 @@ import javax.swing.event.ListSelectionEvent;
  * @author adcam
  */
 public class GUIEditarUsuario extends javax.swing.JFrame {
-
+    
+    private String originalUsername;
     private UserService userService;
     private List<User> userList; 
     public GUIEditarUsuario() {
@@ -229,23 +230,24 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_txtUserNameActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // Botón "Editar": actualizar el usuario
-        String username = txtUserName.getText();
-        String password = new String(txtPassword.getPassword());
-        String role = (String) cmbRoles.getSelectedItem();
+        // // Botón "Editar": actualizar el usuario
+    String newUsername = txtUserName.getText(); // El username modificado
+    String newPassword = new String(txtPassword.getPassword());
+    String newRole = (String) cmbRoles.getSelectedItem();
 
-        if (username.isEmpty() || password.isEmpty() || role.equals("Seleccione")) {
-            JOptionPane.showMessageDialog(this, "Por favor complete todos los campos", "Error de validación", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        boolean actualizado = userService.updateUser(username, password, role);
-        if (actualizado) {
-            JOptionPane.showMessageDialog(this, "Usuario actualizado correctamente");
-            loadUsers(); // Recargar la lista para reflejar cambios
-        } else {
-            JOptionPane.showMessageDialog(this, "Error al actualizar el usuario", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+    if(newUsername.isEmpty() || newPassword.isEmpty() || newRole.equals("Seleccione")){
+        JOptionPane.showMessageDialog(this, "Por favor complete todos los campos", "Error de validación", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    boolean actualizado = userService.updateUser(originalUsername, newUsername, newPassword, newRole);
+    if(actualizado){
+        JOptionPane.showMessageDialog(this, "Usuario actualizado correctamente");
+        originalUsername = newUsername; // Actualiza el valor 
+        loadUsers(); 
+    } else {
+        JOptionPane.showMessageDialog(this, "Error al actualizar el usuario", "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
@@ -307,6 +309,7 @@ private void setupTableSelectionListener() {
             int row = jTable1.getSelectedRow();
             System.out.println("Fila seleccionada: " + row);
             String username = (String) ((javax.swing.table.DefaultTableModel) jTable1.getModel()).getValueAt(row, 0);
+            originalUsername = username;
             txtUserName.setText(username);
             cmbRoles.setSelectedItem((String) ((javax.swing.table.DefaultTableModel) jTable1.getModel()).getValueAt(row, 1));
             // Para la contraseña, obtenemos el usuario completo (asegúrate de que getUser() funcione correctamente)

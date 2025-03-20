@@ -35,9 +35,9 @@ public class UserService {
         user=UserRepositoryImpl.getUser(username);
         return  miRol;
     }
-    public boolean updateUser(String username, String newPassword, String newRole) {
-        return userRepository.updateUser(username, newPassword, newRole);
-    }
+public boolean updateUser(String oldUsername, String newUsername, String newPassword, String newRole) {
+    return userRepository.updateUser(oldUsername, newUsername, newPassword, newRole);
+}
     public List<User> searchUsers(String query) {
         return userRepository.searchUsers(query);
     }
