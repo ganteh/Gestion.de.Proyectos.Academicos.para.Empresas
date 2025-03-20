@@ -157,7 +157,7 @@ public class GUIStudent extends javax.swing.JFrame implements Observer{
                     cargarProyectos();
                 } else {
                     JOptionPane.showMessageDialog(this, 
-                            "No se pudo realizar la postulación. Verifique que no esté postulado ya o contacte al administrador", 
+                            "Usted ya se encuentra postulado en este proyecto.", 
                             "Error", 
                             JOptionPane.ERROR_MESSAGE);
                 }
