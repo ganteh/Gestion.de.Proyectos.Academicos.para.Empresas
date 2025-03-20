@@ -4,6 +4,18 @@
  */
 package co.edu.unicauca.proyectocurso.presentation;
 
+import co.edu.unicauca.proyectocurso.access.DatabaseConnection;
+import co.edu.unicauca.proyectocurso.access.ProjectRepositoryImpl;
+import co.edu.unicauca.proyectocurso.domain.entities.Project;
+import co.edu.unicauca.proyectocurso.domain.services.ProjectService;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ibell
@@ -57,6 +69,11 @@ public class GUIActualizarProyectos extends javax.swing.JFrame {
         jLabel2.setText("Nit Empresa:");
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         tableProyectos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -225,7 +242,36 @@ public class GUIActualizarProyectos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
+        try {
+            int filaSeleccionada = tableProyectos.getSelectedRow();
+            if (filaSeleccionada == -1) {
+                JOptionPane.showMessageDialog(this, "Seleccione un proyecto para editar", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            UUID idProyecto = (UUID) tableProyectos.getValueAt(filaSeleccionada, 0);
+            String nombre = txtNombre.getText().trim();
+            String descripcion = txtDescripcion.getText().trim();
+            String objetivos = txtObjetivos.getText().trim();
+            
+            Project proyectoEditado = new Project();
+            proyectoEditado.setId(idProyecto);
+            proyectoEditado.setName(nombre);
+            proyectoEditado.setDescription(descripcion);
+            proyectoEditado.setObjectives(objetivos);
+            
+            ProjectRepositoryImpl repo = new ProjectRepositoryImpl(DatabaseConnection.getNewConnection());
+            boolean actualizado = repo.update(proyectoEditado);
+            
+            if (actualizado) {
+                JOptionPane.showMessageDialog(this, "Proyecto actualizado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                btnBuscarActionPerformed(null); // Recargar la tabla
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al actualizar el proyecto", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GUIActualizarProyectos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
@@ -235,6 +281,23 @@ public class GUIActualizarProyectos extends javax.swing.JFrame {
     private void txtObjetivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtObjetivosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtObjetivosActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        String nit = txtNIT.getText().trim();
+        if (nit.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un NIT válido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        //List<Project> proyectos = ProjectService.buscarProyectosPorNIT(nit);
+        DefaultTableModel model = (DefaultTableModel) tableProyectos.getModel();
+        model.setRowCount(0); // Limpiar la tabla antes de cargar nuevos datos
+
+        //for (Project p : proyectos) {
+          //  model.addRow(new Object[]{p.getId(), p.getName(), p.getDescription(), p.getObjectives()});
+        //}
+
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments

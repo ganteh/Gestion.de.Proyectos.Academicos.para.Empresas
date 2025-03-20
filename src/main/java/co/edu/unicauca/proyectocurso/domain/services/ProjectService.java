@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class ProjectService extends Observado {
     private IProjectRepository repository = new ProjectRepositoryImpl(); ;
-
+    
     public ProjectService(IProjectRepository repository) {
         this.repository = repository;
     }
@@ -19,7 +19,7 @@ public class ProjectService extends Observado {
     public ProjectService(){
         
     }
-
+    
     public boolean registerProject(String name, String summary, String objectives,
             String description, int maxMonths, float budget,
             LocalDate dueDate, String companyNIT) {
@@ -47,7 +47,8 @@ public class ProjectService extends Observado {
 
         return repository.save(project, companyNIT);
     }
-
+  
+    
     public List<Project> listProjects() {
         return repository.findAll();
     }
@@ -82,10 +83,12 @@ public class ProjectService extends Observado {
         repository.update(project);
         notifyObservers();  // Notifica a los observadores (la GUI)
     }
+    
 
     public void rejectProject(Project project, String justification) {
         project.setState(ProjectState.REJECTED);
         repository.update(project);
         notifyObservers();
     }
+   
 }
