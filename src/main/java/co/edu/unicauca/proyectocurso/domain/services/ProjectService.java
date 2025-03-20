@@ -1,5 +1,6 @@
 package co.edu.unicauca.proyectocurso.domain.services;
 
+import co.edu.unicauca.proyectocurso.access.CompanyRepositoryImpl;
 import co.edu.unicauca.proyectocurso.access.IProjectRepository;
 import co.edu.unicauca.proyectocurso.access.ProjectRepositoryImpl;
 import co.edu.unicauca.proyectocurso.domain.entities.Project;
@@ -28,7 +29,11 @@ public class ProjectService extends Observado {
                 || maxMonths <= 0 || budget <= 0) {
             return false;
         }
-
+        CompanyRepositoryImpl companyRepo = new CompanyRepositoryImpl();
+    if (!companyRepo.existsCompanyNIT(companyNIT)) {
+        System.out.println("El NIT ingresado no existe en la base de datos.");
+        return false;  // Evita registrar el proyecto si el NIT no es válido
+    }
         Project project = new Project(
                 name, // Sin "String"
                 summary,

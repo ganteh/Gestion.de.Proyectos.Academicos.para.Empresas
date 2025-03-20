@@ -22,6 +22,20 @@ public class CompanyRepositoryImpl implements ICompanyRepository {
         public CompanyRepositoryImpl() {
         this.conn = DatabaseConnection.getConnection();
     }
+    @Override
+    public boolean existsCompanyNIT(String companyNIT) {
+        String sql = "SELECT COUNT(*) FROM companies WHERE nit = ?";
+        try (Connection conn = DatabaseConnection.getNewConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, companyNIT);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Retorna true si el NIT existe
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     @Override
 public boolean save(Company company) {

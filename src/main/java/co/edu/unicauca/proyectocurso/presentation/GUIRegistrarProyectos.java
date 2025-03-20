@@ -10,6 +10,7 @@ import java.time.format.DateTimeParseException;
 import javax.swing.JOptionPane;
 import co.edu.unicauca.proyectocurso.domain.services.ProjectService;
 import java.lang.String;
+import co.edu.unicauca.proyectocurso.access.CompanyRepositoryImpl;
 /**
  *
  * @author ibell
@@ -50,6 +51,8 @@ public class GUIRegistrarProyectos extends javax.swing.JFrame {
         txtObjetivos = new javax.swing.JTextField();
         txtDescripcion = new javax.swing.JTextField();
         txtFecha = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        txtNIT = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -92,72 +95,78 @@ public class GUIRegistrarProyectos extends javax.swing.JFrame {
             }
         });
 
+        jLabel11.setText("Nit");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(148, 148, 148))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(38, 38, 38)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(150, 150, 150)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
                         .addComponent(jLabel5)
                         .addGap(23, 23, 23)
                         .addComponent(spnTiempoMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(34, 34, 34)
                         .addComponent(jLabel8))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
                         .addComponent(jLabel6)
                         .addGap(16, 16, 16)
                         .addComponent(spnPresupuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel9))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(134, 134, 134)
-                        .addComponent(jButton1))
+                        .addComponent(jLabel1)
+                        .addGap(10, 10, 10)
+                        .addComponent(txtNombre))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtNIT, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel7)
+                            .addGap(27, 27, 27)
+                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addGap(27, 27, 27)
-                                .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtObjetivos, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel2)
                                     .addGap(18, 18, 18)
-                                    .addComponent(txtObjetivos, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel2)
-                                            .addComponent(jLabel1))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(22, 22, 22)
-                                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(18, 18, 18)
-                                                .addComponent(txtResumen)))))))))
-                .addContainerGap(49, Short.MAX_VALUE))
+                                    .addComponent(txtResumen, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(25, 25, 25)
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(txtNIT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(txtResumen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -184,9 +193,9 @@ public class GUIRegistrarProyectos extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addContainerGap())
+                .addGap(18, 18, 18))
         );
 
         pack();
@@ -201,18 +210,23 @@ public class GUIRegistrarProyectos extends javax.swing.JFrame {
         int presupuesto = (int) spnPresupuesto.getValue();
         String fechaStr = txtFecha.getText();
 
+        String companyNIT = txtNIT.getText(); // Nuevo campo para capturar el NIT
+
         try {
             LocalDate fecha = LocalDate.parse(fechaStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
             ProjectService proyectoService = new ProjectService();
-            boolean registrado = proyectoService.registerProject(nombre, resumen, objetivos, descripcion, tiempoMaximo, presupuesto, fecha, "companyNIT");
+            boolean registrado = proyectoService.registerProject(nombre, resumen, objetivos, descripcion, tiempoMaximo, presupuesto, fecha, companyNIT);
+
             if (registrado) {
                 JOptionPane.showMessageDialog(this, "Proyecto registrado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this, "No se pudo registrar el proyecto.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "No se pudo registrar el proyecto. Verifique los datos.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (DateTimeParseException e) {
             JOptionPane.showMessageDialog(this, "Por favor, ingrese una fecha válida en el formato dd/MM/yyyy.", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese valores numéricos válidos para el presupuesto y el tiempo máximo.", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -264,6 +278,7 @@ public class GUIRegistrarProyectos extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -276,6 +291,7 @@ public class GUIRegistrarProyectos extends javax.swing.JFrame {
     private javax.swing.JSpinner spnTiempoMaximo;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtFecha;
+    private javax.swing.JTextField txtNIT;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtObjetivos;
     private javax.swing.JTextField txtResumen;
