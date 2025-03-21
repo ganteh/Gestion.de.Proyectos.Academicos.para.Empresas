@@ -9,6 +9,7 @@ import co.edu.unicauca.proyectocurso.domain.entities.Student;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class StudentRepositoryImpl implements IStudentRepository {
 
@@ -99,22 +100,27 @@ public class StudentRepositoryImpl implements IStudentRepository {
 
     /**
      * Obtiene el ID del estudiante por su nombre de usuario
+     * @param username Usuario del
      */
-    public String getStudentIdByUsername(String username) {
-        String sql = "SELECT s.id FROM students s JOIN users u ON s.user_id = u.id WHERE u.username = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                String studentId = rs.getString("id");
-                System.out.println("ID del estudiante encontrado: [" + studentId + "]");
-                return studentId;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+    /**
+      * Obtiene el ID del estudiante por su nombre de usuario
+      */
+     public String getStudentIdByUsername(String username) {
+         String sql = "SELECT s.id FROM students s JOIN users u ON s.user_id = u.id WHERE u.username = ?";
+         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+             stmt.setString(1, username);
+             ResultSet rs = stmt.executeQuery();
+             if (rs.next()) {
+                 String studentId = rs.getString("id");
+                 System.out.println("ID del estudiante encontrado: [" + studentId + "]");
+                 return studentId;
+             }
+         } catch (SQLException e) {
+             e.printStackTrace();
+         }
+         return null;
+     }
+
 
     @Override
     public List<Student> findAll() {
@@ -195,62 +201,83 @@ public class StudentRepositoryImpl implements IStudentRepository {
     }
 
     /**
-     * Inserta una relación entre estudiante y proyecto usando una transacción
+     * Inserta una relación entre estudiante y proyecto  studentId, String projectId, String status) {
+    try {
+        conn.setAutoCommit(false);
+        
+        // Primero verifica si el estudiante existe
+        String checkSql = "SELECT 1 FROM students WHERE id = ?";
+        try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
+            checkStmt.setString(1, studentId);
+            ResultSet rs = checkStmt.executusando una transacción
      */
     public boolean insertStudentProject(String studentId, String projectId, String status) {
-        try {
-            conn.setAutoCommit(false);
-            
-            // Primero verifica si el estudiante existe
-            String checkSql = "SELECT 1 FROM students WHERE id = ?";
-            try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
-                checkStmt.setString(1, studentId);
-                ResultSet rs = checkStmt.executeQuery();
-                if (!rs.next()) {
-                    System.out.println("El estudiante con ID [" + studentId + "] no existe");
-                    conn.rollback();
-                    return false;
-                }
-            }
-            
-            // Luego verifica si el proyecto existe
-            String checkProjectSql = "SELECT 1 FROM projects WHERE id = ?";
-            try (PreparedStatement checkProjStmt = conn.prepareStatement(checkProjectSql)) {
-                checkProjStmt.setString(1, projectId);
-                ResultSet rs = checkProjStmt.executeQuery();
-                if (!rs.next()) {
-                    System.out.println("El proyecto con ID [" + projectId + "] no existe");
-                    conn.rollback();
-                    return false;
-                }
-            }
-            
-            // Si ambos existen, haz la inserción
-            String insertSql = "INSERT INTO student_projects (student_id, project_id, status) VALUES (?, ?, ?)";
-            try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
-                insertStmt.setString(1, studentId);
-                insertStmt.setString(2, projectId);
-                insertStmt.setString(3, status);
-                int result = insertStmt.executeUpdate();
-                conn.commit();
-                return result > 0;
-            }
-        } catch (SQLException e) {
-            try {
+    try {
+        conn.setAutoCommit(false);
+        
+        // Primero verifica si el estudiante existe
+        String checkSql = "SELECT 1 FROM students WHERE id = ?";
+        try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
+            checkStmt.setString(1, studentId);
+            ResultSet rs = checkStmt.executeQuery();
+            if (!rs.next()) {
+                System.out.println("El estudiante con ID [" + studentId + "] no existe");
                 conn.rollback();
-            } catch (SQLException rollbackEx) {
-                rollbackEx.printStackTrace();
-            }
-            e.printStackTrace();
-            return false;
-        } finally {
-            try {
-                conn.setAutoCommit(true);
-            } catch (SQLException e) {
-                e.printStackTrace();
+                return false;
             }
         }
+        
+        // Luego verifica si el proyecto existe
+        String checkProjectSql = "SELECT 1 FROM projects WHERE id = ?";
+        try (PreparedStatement checkProjStmt = conn.prepareStatement(checkProjectSql)) {
+            checkProjStmt.setString(1, projectId);
+            ResultSet rs = checkProjStmt.executeQuery();
+            if (!rs.next()) {
+                System.out.println("El proyecto con ID [" + projectId + "] no existe");
+                conn.rollback();
+                return false;
+            }
+        }
+        
+        // Verifica si el estudiante ya está postulado a este proyecto
+        String checkExistingSql = "SELECT 1 FROM student_projects WHERE student_id = ? AND project_id = ?";
+        try (PreparedStatement checkExistingStmt = conn.prepareStatement(checkExistingSql)) {
+            checkExistingStmt.setString(1, studentId);
+            checkExistingStmt.setString(2, projectId);
+            ResultSet rs = checkExistingStmt.executeQuery();
+            if (rs.next()) {
+                System.out.println("El estudiante con ID [" + studentId + "] ya está postulado al proyecto [" + projectId + "]");
+                conn.rollback();
+                return false;
+            }
+        }
+        
+        // Si no existe una postulación previa, haz la inserción
+        String insertSql = "INSERT INTO student_projects (student_id, project_id, status) VALUES (?, ?, ?)";
+        try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
+            insertStmt.setString(1, studentId);
+            insertStmt.setString(2, projectId);
+            insertStmt.setString(3, status);
+            int result = insertStmt.executeUpdate();
+            conn.commit();
+            return result > 0;
+        }
+    } catch (SQLException e) {
+        try {
+            conn.rollback();
+        } catch (SQLException rollbackEx) {
+            rollbackEx.printStackTrace();
+        }
+        e.printStackTrace();
+        return false;
+    } finally {
+        try {
+            conn.setAutoCommit(true);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+}
     public boolean isStudentAlreadyApplied(String studentId, String projectId) {
     String sql = "SELECT COUNT(*) FROM student_projects WHERE student_id = ? AND project_id = ?";
     
@@ -267,9 +294,6 @@ public class StudentRepositoryImpl implements IStudentRepository {
     }
     return false;
 }
-
-
-   
 
 
     @Override

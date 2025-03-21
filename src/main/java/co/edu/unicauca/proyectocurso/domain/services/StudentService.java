@@ -48,18 +48,15 @@ public class StudentService extends Observado {
      * Asigna un proyecto a un estudiante usando el nombre de usuario
      */
     public boolean assignProjectToStudent(String username, String projectId) {
-        Student student = getStudentByUsername(username);
-        if (student == null) {
-        return false;
-    }
-
-    // Verificar si el estudiante ya está postulado en este proyecto
-    if (StudentRepository.isStudentAlreadyApplied(student.getId().toString(), projectId)) {
-        return false; // Evita registrar dos veces el mismo estudiante en un proyecto
-    }
-
-    return StudentRepository.insertStudentProject(student.getId().toString(), projectId, "RECEIVED");
-}
+         // Obtener el ID del estudiante desde la base de datos
+         String studentId = StudentRepository.getStudentIdByUsername(username);
+         if (studentId == null) {
+             System.out.println("No se encontró el estudiante con username: " + username);
+             return false;
+         }
+         System.out.println("Asignando proyecto " + projectId + " al estudiante con ID: " + studentId);
+         return StudentRepository.insertStudentProject(studentId, projectId, "RECEIVED");
+     }
 
     
     /**

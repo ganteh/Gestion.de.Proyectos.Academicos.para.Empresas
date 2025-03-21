@@ -31,6 +31,7 @@ public class GUIStudent extends javax.swing.JFrame implements Observer{
        public GUIStudent() 
        {
            initComponents(); 
+           labelName.setText(username);
            this.studentService = new StudentService(); 
            this.projectService = new ProjectService();
            this.studentService.addObserver(this);
@@ -42,6 +43,7 @@ public class GUIStudent extends javax.swing.JFrame implements Observer{
 
     public GUIStudent(String username) {
         initComponents();
+        labelName.setText(username);
         this.username = username;
         this.studentService = new StudentService();
         this.projectService = new ProjectService();
@@ -73,6 +75,7 @@ public class GUIStudent extends javax.swing.JFrame implements Observer{
         tableProjects = new javax.swing.JTable();
         btnPostularse = new javax.swing.JButton();
         btnDetalles = new javax.swing.JButton();
+        labelName = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -94,30 +97,36 @@ public class GUIStudent extends javax.swing.JFrame implements Observer{
             }
         });
 
+        labelName.setText("jLabel2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(344, 344, 344))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(294, 294, 294)
                 .addComponent(btnPostularse)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnDetalles)
-                .addGap(119, 119, 119))
+                .addGap(89, 89, 89))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(278, 278, 278)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(labelName, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                .addGap(357, 357, 357))
             .addGroup(layout.createSequentialGroup()
                 .addGap(56, 56, 56)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(labelName))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
@@ -131,44 +140,44 @@ public class GUIStudent extends javax.swing.JFrame implements Observer{
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPostularseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPostularseActionPerformed
-        int selectedRow = tableProjects.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un proyecto para postularse", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        String projectId = tableModel.getValueAt(selectedRow, 0).toString();
-        String projectName = tableModel.getValueAt(selectedRow, 3).toString();
-        
-        int confirm = JOptionPane.showConfirmDialog(this, 
-                "¿Está seguro que desea postularse al proyecto: " + projectName + "?", 
-                "Confirmar Postulación", 
-                JOptionPane.YES_NO_OPTION);
-        
-        if (confirm == JOptionPane.YES_OPTION) {
-            try {
-                boolean result = studentService.assignProjectToStudent(username, projectId);
-                
-                if (result) {
-                    JOptionPane.showMessageDialog(this, 
-                            "Se ha postulado exitosamente al proyecto", 
-                            "Éxito", 
-                            JOptionPane.INFORMATION_MESSAGE);
-                    cargarProyectos();
-                } else {
-                    JOptionPane.showMessageDialog(this, 
-                            "Usted ya se encuentra postulado en este proyecto.", 
-                            "Error", 
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, 
-                        "Error al procesar la postulación: " + ex.getMessage(), 
-                        "Error", 
-                        JOptionPane.ERROR_MESSAGE);
-                ex.printStackTrace();
-            }
-        }
+         int selectedRow = tableProjects.getSelectedRow();
+         if (selectedRow == -1) {
+             JOptionPane.showMessageDialog(this, "Debe seleccionar un proyecto para postularse", "Advertencia", JOptionPane.WARNING_MESSAGE);
+             return;
+         }
+         
+         String projectId = tableModel.getValueAt(selectedRow, 0).toString();
+         String projectName = tableModel.getValueAt(selectedRow, 3).toString();
+         
+         int confirm = JOptionPane.showConfirmDialog(this, 
+                 "¿Está seguro que desea postularse al proyecto: " + projectName + "?", 
+                 "Confirmar Postulación", 
+                 JOptionPane.YES_NO_OPTION);
+         
+         if (confirm == JOptionPane.YES_OPTION) {
+             try {
+                 boolean result = studentService.assignProjectToStudent(username, projectId);
+                 
+                 if (result) {
+                     JOptionPane.showMessageDialog(this, 
+                             "Se ha postulado exitosamente al proyecto", 
+                             "Éxito", 
+                             JOptionPane.INFORMATION_MESSAGE);
+                     cargarProyectos();
+                 } else {
+                     JOptionPane.showMessageDialog(this, 
+                             "No se puedo realizar la postulación, debido a que usted ya está postulado a este proyecto.", 
+                             "Error", 
+                             JOptionPane.ERROR_MESSAGE);
+                 }
+             } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(this, 
+                         "Error al procesar la postulación: " + ex.getMessage(), 
+                         "Error", 
+                         JOptionPane.ERROR_MESSAGE);
+                 ex.printStackTrace();
+             }
+         }
     }//GEN-LAST:event_btnPostularseActionPerformed
 
     private void btnDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetallesActionPerformed
@@ -240,6 +249,7 @@ public class GUIStudent extends javax.swing.JFrame implements Observer{
     private javax.swing.JButton btnPostularse;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel labelName;
     private javax.swing.JTable tableProjects;
     // End of variables declaration//GEN-END:variables
 
