@@ -105,10 +105,14 @@ public class GUICoord extends javax.swing.JFrame {
         // TODO add your handling code here:
         GUIProyActivos proyActivos = new GUIProyActivos();
         proyActivos.setVisible(true);
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        
+        GUISolicitudesEstudiantes solicitudesEstudiantes = new GUISolicitudesEstudiantes(); 
+        solicitudesEstudiantes.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

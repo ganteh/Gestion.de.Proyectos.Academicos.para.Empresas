@@ -4,7 +4,9 @@
  */
 package co.edu.unicauca.proyectocurso.access;
 import co.edu.unicauca.proyectocurso.domain.entities.Student;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 /**
  *
  * @author yeixongec
@@ -29,4 +31,8 @@ public interface IStudentRepository {
      * @return True si el proyecto se actualizo correctamente, en caso contrario False
      */
     public boolean update(Student student);
+    
+    Student findById(UUID studentId);
+    
+    ArrayList<Student> findStudentsByProjectId(String projectId);
 }

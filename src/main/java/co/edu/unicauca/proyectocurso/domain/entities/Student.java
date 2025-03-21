@@ -22,6 +22,22 @@ public class Student extends User {
         this.program = program;
         this.projectID = projectID;
     }
+    
+    public Student(UUID id) {
+        super("", "", "Estudiante"); // Se deja el email y password vacíos por defecto
+        this.id = id;
+    }
+    
+    public Student(String id, String firstName, String lastName, String program, String projectID){
+        super("x", "x", "Estudiante");
+        this.id = UUID.fromString(id);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.program = program;
+        this.projectID = projectID;
+        
+ 
+    }
 
     public String getFirstName() {
         return firstName;

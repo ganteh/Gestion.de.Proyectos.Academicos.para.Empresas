@@ -54,6 +54,10 @@ public class Project {
         this.FinalizationDate = null; // Se puede definir una fecha predeterminada si aplica
     }
 
+    Project(UUID fromString) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     public void addComment(String comment) {
         comments.add(comment);
     }

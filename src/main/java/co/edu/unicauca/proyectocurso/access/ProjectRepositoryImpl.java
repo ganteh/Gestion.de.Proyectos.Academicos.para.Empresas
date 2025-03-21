@@ -159,8 +159,45 @@ public class ProjectRepositoryImpl implements IProjectRepository {
         return projects;
     }
 
+    @Override
+    public Project findById(UUID projectId) {
+        String sql = "SELECT id, name, summary, description, date, state, company_nit, budget, max_months, objectives FROM projects WHERE id = ?";
 
+        try (Connection conn = DatabaseConnection.getNewConnection(); 
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-    
- 
+            pstmt.setString(1, projectId.toString());
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                Project project = new Project();
+                project.setId(UUID.fromString(rs.getString("id")));
+                project.setName(rs.getString("name"));
+                project.setSummary(rs.getString("summary")); // Nuevo campo
+                project.setDescription(rs.getString("description"));
+                project.setDate(rs.getDate("date").toLocalDate());
+                project.setState(ProjectState.valueOf(rs.getString("state")));
+                project.setBudget(rs.getFloat("budget"));
+                project.setMaxMonths(rs.getInt("max_months"));
+                project.setObjectives(rs.getString("objectives"));
+
+                // Cargar la empresa asociada
+                String companyNit = rs.getString("company_nit");
+                if (companyNit != null) {
+                    CompanyService companyService = new CompanyService(new CompanyRepositoryImpl());
+                    Company company = companyService.findCompanyByNit(companyNit);
+                    project.setCompany(company);
+                    if (company != null) {
+                        company.addProject(project); // Relación bidireccional
+                    }
+                }
+                return project;
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(ProjectRepositoryImpl.class.getName()).log(Level.SEVERE, "Error al obtener el proyecto por ID", e);
+        }
+
+        return null; // Retorna null si no se encuentra el proyecto
+    }
 }

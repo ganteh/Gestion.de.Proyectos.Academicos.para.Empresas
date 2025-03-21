@@ -4,7 +4,10 @@ import co.edu.unicauca.proyectocurso.access.CompanyRepositoryImpl;
 import co.edu.unicauca.proyectocurso.access.IProjectRepository;
 import co.edu.unicauca.proyectocurso.domain.entities.Project;
 import co.edu.unicauca.proyectocurso.domain.entities.ProjectState;
+import co.edu.unicauca.proyectocurso.domain.entities.Student;
+import co.edu.unicauca.proyectocurso.domain.entities.StudentProject;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -176,5 +179,14 @@ public class ProjectService extends Observado {
             System.err.println("Error en el servicio al actualizar proyecto: " + e.getMessage());
             return false;
         }
+    }
+    
+    public void inExecuteValidation(StudentProject studentProject, ArrayList<Student> students){
+        Project proyecto = repository.findById(UUID.fromString(studentProject.getProjectID()));
+                  if (students.size() == 1) {
+                    proyecto.setState(ProjectState.IN_EXECUTION);
+                        repository.update(proyecto);
+                        notifyObservers();
+                }
     }
 }

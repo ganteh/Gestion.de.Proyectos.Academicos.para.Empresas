@@ -179,7 +179,7 @@ public class StudentRepositoryImpl implements IStudentRepository {
                p.name AS project_name, p.description
                FROM projects p
                JOIN companies e ON p.company_nit = e.nit
-                WHERE p.state = 'RECEIVED'
+                WHERE p.state = 'ACCEPTED'
             """;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);
@@ -298,6 +298,80 @@ public class StudentRepositoryImpl implements IStudentRepository {
 
     @Override
     public boolean update(Student student) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String sql = "UPDATE students SET first_name = ?, last_name = ?, program = ?, project_id = ? WHERE id = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, student.getFirstName());
+            stmt.setString(2, student.getLastName());
+            stmt.setString(3, student.getProgram());
+            if (student.getProjectID() == null) {
+                stmt.setNull(4, Types.VARCHAR);
+            } else {
+                stmt.setString(4, student.getProjectID());
+            }
+            stmt.setString(5, student.getId().toString());
+            
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public Student findById(UUID studentId) {
+        String sql = "SELECT s.id, u.username, s.first_name, s.last_name, s.program, s.project_id " +
+                     "FROM students s JOIN users u ON s.user_id = u.id WHERE s.id = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, studentId.toString());
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                return new Student(
+                    rs.getString("id"),
+                    rs.getString("username"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("program"),
+                    rs.getString("project_id")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<Student> findStudentsByProjectId(String projectId) {
+        ArrayList<Student> students = new ArrayList<>();
+        String sql = "SELECT s.id, s.first_name, s.last_name, s.program " +
+                     "FROM students s " +
+                     "JOIN student_projects sp ON s.id = sp.student_id " +
+                     "WHERE sp.project_id = ?";
+
+        try (Connection conn = DatabaseConnection.getNewConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, projectId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Student student = new Student(
+                    rs.getString("id"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("program"),
+                    projectId
+                );
+                students.add(student);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener estudiantes del proyecto: " + e.getMessage());
+        }
+
+        return students;
     }
 }

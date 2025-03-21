@@ -5,6 +5,7 @@
 package co.edu.unicauca.proyectocurso.presentation;
 
 import co.edu.unicauca.proyectocurso.domain.entities.Project;
+import co.edu.unicauca.proyectocurso.domain.entities.Student;
 import co.edu.unicauca.proyectocurso.domain.services.Observer;
 import co.edu.unicauca.proyectocurso.domain.services.ProjectService;
 import java.util.List;
@@ -151,7 +152,28 @@ public class GUIProyActivos extends javax.swing.JFrame implements Observer {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        int filaSeleccionada = jTable1.getSelectedRow();
+        if (filaSeleccionada >= 0) {
+            String nombreProyecto = (String) jTable1.getValueAt(filaSeleccionada, 0); // Obtener nombre desde la tabla
+            
+            // Buscar el proyecto en la lista de proyectos en ejecución
+            Project proyecto = projectService.getInExecutionProjects()
+                    .stream()
+                    .filter(p -> p.getName().equals(nombreProyecto))
+                    .findFirst()
+                    .orElse(null);
+            
 
+
+            if (proyecto != null) {
+                GUIEstudiantesAsociadosAProyecto estudiantesAsociadosAProyecto = new GUIEstudiantesAsociadosAProyecto(proyecto); // Abrir la ventana con detalles
+                estudiantesAsociadosAProyecto.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró el proyecto seleccionado.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un proyecto de la tabla.");
+        }          
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

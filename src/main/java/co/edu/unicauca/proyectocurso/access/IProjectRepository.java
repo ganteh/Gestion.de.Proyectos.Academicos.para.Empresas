@@ -33,4 +33,6 @@ public interface IProjectRepository {
     public List<Project> findProjectsByCompanyNIT(String nit);
 
     boolean delete(UUID projectId);
+
+    public Project findById(UUID fromString);
 }

@@ -4,17 +4,52 @@
  */
 package co.edu.unicauca.proyectocurso.presentation;
 
+import co.edu.unicauca.proyectocurso.access.IProjectRepository;
+import co.edu.unicauca.proyectocurso.access.IStudentRepository;
+import co.edu.unicauca.proyectocurso.access.ProjectRepositoryImpl;
+import co.edu.unicauca.proyectocurso.access.StudentRepositoryImpl;
+import co.edu.unicauca.proyectocurso.domain.entities.Project;
+import co.edu.unicauca.proyectocurso.domain.entities.Student;
+import co.edu.unicauca.proyectocurso.domain.entities.StudentProject;
+import co.edu.unicauca.proyectocurso.domain.services.Observer;
+import co.edu.unicauca.proyectocurso.domain.services.ProjectService;
+import java.util.List;
+import java.util.UUID;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Lenovo pc
  */
 public class GUIEstudiantesAsociadosAProyecto extends javax.swing.JFrame {
-
+    private IStudentRepository studentRepository = new StudentRepositoryImpl();
+    private IProjectRepository repository = new ProjectRepositoryImpl(); 
+    private ProjectService projectService = new ProjectService();
+    DefaultTableModel model = new DefaultTableModel();
     /**
      * Creates new form GUIEstudiantesAsociadosAProyecto
      */
     public GUIEstudiantesAsociadosAProyecto() {
         initComponents();
+    }
+    
+    public GUIEstudiantesAsociadosAProyecto(Project proyecto) {
+        initComponents();
+        String[] columnas = { "Nombre", "Apellido", "Programa", "Id" };
+        model.setColumnIdentifiers(columnas);
+        jTable1.setModel(model);
+        
+        cargarEstudiantes(proyecto);
+    }
+    
+
+    
+    private void cargarEstudiantes(Project proyecto){
+       List<Student> students = studentRepository.findStudentsByProjectId(proyecto.getId().toString());
+       model.setRowCount(0);
+       for (Student p : students) {
+            model.addRow(new Object[]{p.getFirstName(), p.getLastName(), p.getProgram(), p.getId()});
+        }
     }
 
     /**
@@ -26,17 +61,27 @@ public class GUIEstudiantesAsociadosAProyecto extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+
+        jTable1.setModel(model);
+        jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(74, 74, 74)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(82, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(108, Short.MAX_VALUE))
         );
 
         pack();
@@ -78,5 +123,11 @@ public class GUIEstudiantesAsociadosAProyecto extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+
+
+
+
 }

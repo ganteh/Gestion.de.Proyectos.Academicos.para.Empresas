@@ -6,9 +6,11 @@ package co.edu.unicauca.figuras.proyectoempresa;
 
 import co.edu.unicauca.proyectocurso.access.DatabaseConnection;
 import co.edu.unicauca.proyectocurso.access.ProjectRepositoryImpl;
+import co.edu.unicauca.proyectocurso.access.StudentRepositoryImpl;
 import co.edu.unicauca.proyectocurso.domain.entities.Company;
 import co.edu.unicauca.proyectocurso.domain.entities.Project;
 import co.edu.unicauca.proyectocurso.domain.entities.ProjectState;
+import co.edu.unicauca.proyectocurso.domain.entities.Student;
 import co.edu.unicauca.proyectocurso.presentation.GUICoordProyPendientes;
 import co.edu.unicauca.proyectocurso.presentation.GUIRegistrarUsuarios;
 import co.edu.unicauca.proyectocurso.presentation.GUILogin;
@@ -25,7 +27,29 @@ import javax.swing.SwingUtilities;
 public class ProyectoEmpresa {
 
     public static void main(String[] args) {
+        
          ProjectRepositoryImpl repository = new ProjectRepositoryImpl();
+         StudentRepositoryImpl srepository = new StudentRepositoryImpl();
+////
+////            Student student2 = srepository.findById(UUID.fromString("3d26fb95-71d8-4be5-bc7e-6f0b253a741d"));
+//            Project project = repository.findById(UUID.fromString("22f9264d-4085-4bac-b3db-2d43a48070c5"));
+////            
+////            project.addStudent(student2);
+//    if (project != null) {
+//        List<Student> students = project.getStudents();
+////
+//        if (!students.isEmpty()) {
+//            System.out.println("📌 Lista de estudiantes del proyecto '" + project.getName() + "':");
+//            for (Student student : students) {
+//                System.out.println("   - 🎓 " + student.getFirstName() + " (ID: " + student.getId() + ")");
+//            }
+//        } else {
+//            System.out.println("⚠️ El proyecto '" + project.getName() + "' no tiene estudiantes asociados.");
+//        }
+//    } else {
+//        System.out.println("❌ No se encontró un proyecto con el ID " );
+//    }
+
 
         // 🔹 1. Probar el método save()
 //        Company empresa = new Company();
@@ -35,10 +59,10 @@ public class ProyectoEmpresa {
 //
 //        Project newProject = new Project();
 //        newProject.setId(UUID.randomUUID());
-//        newProject.setName("Nuevo Proyecto");
-//        newProject.setDescription("Este es un proyecto de prueba");
+//        newProject.setName("SUICIDIO");
+//        newProject.setDescription("NIKA");
 //        newProject.setDate(java.time.LocalDate.now());
-//        newProject.setState(ProjectState.IN_EXECUTION);
+//        newProject.setState(ProjectState.RECEIVED);
 //        newProject.setBudget(10000000);
 //        newProject.setMaxMonths(12);
 //        newProject.setObjectives("cagadon");
@@ -46,6 +70,8 @@ public class ProyectoEmpresa {
 //
 //       boolean isSaved = repository.save(newProject, empresa.getNit());
 //       System.out.println("✅ Proyecto guardado: " + isSaved);
+
+
         // 🔹 2. Probar el método findAll()
         // List<Project> proyectos = repository.findAll();
         // System.out.println("🔹 Lista de proyectos:");
