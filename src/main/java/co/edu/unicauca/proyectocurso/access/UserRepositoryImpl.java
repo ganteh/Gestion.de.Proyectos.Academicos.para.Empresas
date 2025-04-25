@@ -15,18 +15,31 @@ public class UserRepositoryImpl implements IUserRepository {
     }
 
     @Override
-    public boolean save(User user) {
-        String sql = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getPassword());
-            stmt.setString(3, user.getRole());
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+
+public boolean save(User user) {
+    String sql = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
+    try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        stmt.setString(1, user.getUsername());
+        stmt.setString(2, user.getPassword());
+        stmt.setString(3, user.getRole());
+        
+        int rowsAffected = stmt.executeUpdate();
+        if (rowsAffected > 0) {
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int id = generatedKeys.getInt(1);
+                    // Asigna el id generado al objeto User
+                    user.setId(id);
+                }
+            }
         }
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
     }
+}
+
 
     @Override
     public List<User> findAll() {
@@ -38,7 +51,8 @@ public class UserRepositoryImpl implements IUserRepository {
                 users.add(new User(
                     rs.getString("username"),
                     rs.getString("password"),
-                    rs.getString("role")
+                    rs.getString("role"),
+                    rs.getInt("id")
                 ));
             }
         } catch (SQLException e) {
@@ -48,10 +62,10 @@ public class UserRepositoryImpl implements IUserRepository {
     }
 
     // Método para registrar usuario
-    public boolean registerUser(String username, String password, String role) {
-        return save(new User(username, password, role));
+    public boolean registerUser(String username, String password, String role ,int id) {
+        return save(new User(username, password, role, id));
+   
     }
-
     // Método para validar usuario y obtener su rol
     public String getUserRole(String username, String password) {
         String sql = "SELECT role FROM users WHERE username = ? AND password = ?";
@@ -97,7 +111,7 @@ public boolean updateUser(String oldUsername, String newUsername, String newPass
 }
 
         public static User getUser(String username) {
-    String sql = "SELECT username, password, role FROM users WHERE username = ?";
+    String sql = "SELECT id, username, password, role FROM users WHERE username = ?";
     try (Connection conn = getNewConnection();
          PreparedStatement stmt = conn.prepareStatement(sql)) {
          
@@ -108,7 +122,8 @@ public boolean updateUser(String oldUsername, String newUsername, String newPass
                  String uname = rs.getString("username");
                  String pwd = rs.getString("password");
                  String role = rs.getString("role");
-                 return new User(uname, pwd, role);
+                 int id = rs.getInt("id");
+                 return new User(uname, pwd, role ,id);
              }
          }
     } catch (SQLException e) {
@@ -127,7 +142,8 @@ public boolean updateUser(String oldUsername, String newUsername, String newPass
             users.add(new User(
                 rs.getString("username"),
                 rs.getString("password"),
-                rs.getString("role")
+                rs.getString("role"),
+                rs.getInt("id")
             ));
          }
     } catch (SQLException e) {
@@ -151,7 +167,8 @@ public boolean updateUser(String oldUsername, String newUsername, String newPass
             users.add(new User(
                 rs.getString("username"),
                 rs.getString("password"),
-                rs.getString("role")
+                rs.getString("role"),
+                rs.getInt("id")
             ));
          }
     } catch (SQLException e) {

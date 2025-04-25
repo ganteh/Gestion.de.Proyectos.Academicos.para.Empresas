@@ -4,8 +4,11 @@
  */
 package co.edu.unicauca.proyectocurso.presentation;
 
+import co.edu.unicauca.proyectocurso.access.CompanyRepositoryImpl;
 import co.edu.unicauca.proyectocurso.access.UserRepositoryImpl;
+import co.edu.unicauca.proyectocurso.domain.entities.Company;
 import co.edu.unicauca.proyectocurso.domain.entities.User;
+import co.edu.unicauca.proyectocurso.domain.services.CompanyService;
 import co.edu.unicauca.proyectocurso.domain.services.UserService;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -117,11 +120,13 @@ public class GUILogin extends javax.swing.JFrame {
 
     // Crear instancia de UserService
     UserService userService = new UserService(new UserRepositoryImpl());
-    
+    User user = userService.GetUser(username);
+    int userId = user.getId();
+    CompanyService companyService = new CompanyService(new CompanyRepositoryImpl());
+Company company = companyService.getCompanyByUserId(userId);
     // Validar usuario en la base de datos
     String role = userService.validarUsuario(username, password);
     boolean profileCompleted = userService.isProfileCompleted(username);
-    User user = new User(username, password, role );
     
     if (role != null) {
         // Si el usuario es Empresa o Estudiante y el perfil NO está completado, redirigir a completar el registro.
@@ -129,13 +134,13 @@ public class GUILogin extends javax.swing.JFrame {
             if (role.equals("Empresa")) {
                 // Redirigir a la GUI para que complete el registro de Empresa
                 this.dispose();
-                GUIRegistrarEmpresa guiEmpresa = new GUIRegistrarEmpresa(username, password);
+                GUIRegistrarEmpresa guiEmpresa = new GUIRegistrarEmpresa(username, password,userId);
                 guiEmpresa.setVisible(true);
                 boolean actualizado = userService.updateProfileCompleted(username, true);
             } else if (role.equals("Estudiante")) {
                 // Redirigir a la GUI para que complete el registro de Estudiante
                 this.dispose();
-                GUIRegistrarEstudiante guiEstudiante = new GUIRegistrarEstudiante(username, password);
+                GUIRegistrarEstudiante guiEstudiante = new GUIRegistrarEstudiante(username, password, userId);
                 guiEstudiante.setVisible(true);
                 boolean actualizado = userService.updateProfileCompleted(username, true);
             }
@@ -159,7 +164,7 @@ public class GUILogin extends javax.swing.JFrame {
             } else if (role.equals("Empresa")) {
                 this.dispose();
                 JOptionPane.showMessageDialog(this, "Bienvenido, Empresa: " + username);
-                GUICompany companyGUI = new GUICompany();
+                GUICompany companyGUI = new GUICompany(company); 
                 companyGUI.setVisible(true);
             }
         }

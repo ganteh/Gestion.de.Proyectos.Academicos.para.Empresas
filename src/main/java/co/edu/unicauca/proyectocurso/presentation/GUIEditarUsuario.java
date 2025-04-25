@@ -45,7 +45,6 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtUserName = new javax.swing.JTextField();
-        cmbRoles = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         txtPassword = new javax.swing.JPasswordField();
         jButton2 = new javax.swing.JButton();
@@ -55,6 +54,7 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,13 +70,6 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
         txtUserName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUserNameActionPerformed(evt);
-            }
-        });
-
-        cmbRoles.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Empresa", "Estudiante", "Coordinador" }));
-        cmbRoles.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbRolesActionPerformed(evt);
             }
         });
 
@@ -148,6 +141,13 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
 
         jLabel2.setText("Nombre");
 
+        jTextField2.setEditable(false);
+        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -167,9 +167,9 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jCheckBox1))
                             .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbRoles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -211,7 +211,7 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
                         .addGap(25, 25, 25)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(cmbRoles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1)
@@ -233,7 +233,7 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
         // // Botón "Editar": actualizar el usuario
     String newUsername = txtUserName.getText(); // El username modificado
     String newPassword = new String(txtPassword.getPassword());
-    String newRole = (String) cmbRoles.getSelectedItem();
+    String newRole = (String) jTextField2.getText();
 
     if(newUsername.isEmpty() || newPassword.isEmpty() || newRole.equals("Seleccione")){
         JOptionPane.showMessageDialog(this, "Por favor complete todos los campos", "Error de validación", JOptionPane.ERROR_MESSAGE);
@@ -281,9 +281,9 @@ public class GUIEditarUsuario extends javax.swing.JFrame {
         loadTable(userList);
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void cmbRolesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbRolesActionPerformed
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cmbRolesActionPerformed
+    }//GEN-LAST:event_jTextField2ActionPerformed
     // Método para cargar la tabla con la lista de usuarios
     private void loadTable(List<User> list) {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
@@ -311,7 +311,7 @@ private void setupTableSelectionListener() {
             String username = (String) ((javax.swing.table.DefaultTableModel) jTable1.getModel()).getValueAt(row, 0);
             originalUsername = username;
             txtUserName.setText(username);
-            cmbRoles.setSelectedItem((String) ((javax.swing.table.DefaultTableModel) jTable1.getModel()).getValueAt(row, 1));
+            jTextField2.setText((String) ((javax.swing.table.DefaultTableModel) jTable1.getModel()).getValueAt(row, 1));
             // Para la contraseña, obtenemos el usuario completo (asegúrate de que getUser() funcione correctamente)
             User u = UserRepositoryImpl.getUser(username);
             if(u != null){
@@ -340,7 +340,6 @@ private void setupTableSelectionListener() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> cmbRoles;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -353,6 +352,7 @@ private void setupTableSelectionListener() {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUserName;
     // End of variables declaration//GEN-END:variables

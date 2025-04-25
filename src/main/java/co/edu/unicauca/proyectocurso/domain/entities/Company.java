@@ -9,6 +9,7 @@ import java.util.List;
  * @author ibell
  */
 public class Company extends User {
+    private int id;
     private String nit;
     private String name;
     private String sector;
@@ -18,10 +19,10 @@ public class Company extends User {
     private String contactPosition;
     private List<Project> projects;
 
-    public Company(String email, String password, String nit, String name, String sector, 
+    public Company(String User, String password, String nit, String name, String sector, 
                    String contactPhone, String contactFirstName, String contactLastName, 
-                   String contactPosition) {
-        super(email, password, "Empresa");
+                   String contactPosition , int id) {
+        super(User, password, "Empresa", id);
         this.nit = nit;
         this.name = name;
         this.sector = sector;
@@ -31,26 +32,19 @@ public class Company extends User {
         this.contactPosition = contactPosition;
         this.projects = new ArrayList<>();
     } 
-    // Constructor con NIT
-    public Company(String nit) {
-        super("default@empresa.com", "password123", "Empresa"); // Valores por defecto
-        this.nit = nit;
-        // Inicializa otros campos si es necesario
-    }
-    
-    //Constructor genérico con valores predeterminados
-    public Company() {
-        super("default@empresa.com", "password123", "Empresa"); // Usuario genérico
-        this.nit = "000000000";
-        this.name = "Empresa Desconocida";
-        this.sector = "No especificado";
-        this.contactPhone = "0000000000";
-        this.contactFirstName = "Nombre";
-        this.contactLastName = "Apellido";
-        this.contactPosition = "Cargo";
-        this.projects = new ArrayList<>();
-    }
-    
+public Company(){
+    super("defaultEmail@example.com", "defaultPassword", "Empresa", 0);
+    // Puedes inicializar otros campos si es necesario
+    this.nit = "";
+    this.name = "";
+    this.sector = "";
+    this.contactPhone = "";
+    this.contactFirstName = "";
+    this.contactLastName = "";
+    this.contactPosition = "";
+    this.projects = new ArrayList<>();
+}
+
 
     public void addProject(Project project) {
         projects.add(project);

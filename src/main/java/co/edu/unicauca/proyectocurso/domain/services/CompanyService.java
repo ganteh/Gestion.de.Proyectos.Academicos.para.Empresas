@@ -1,5 +1,6 @@
 package co.edu.unicauca.proyectocurso.domain.services;
 
+import co.edu.unicauca.proyectocurso.access.CompanyRepositoryImpl;
 import co.edu.unicauca.proyectocurso.access.ICompanyRepository;
 import co.edu.unicauca.proyectocurso.domain.entities.Company;
 import java.util.List;
@@ -18,14 +19,14 @@ public class CompanyService {
     public boolean registerCompany(String username, String password, String nit, 
                                   String name, String sector, String contactPhone, 
                                   String contactFirstName, String contactLastName, 
-                                  String contactPosition) {
+                                  String contactPosition, int id) {
         if (username == null || username.isBlank() || password == null || password.isBlank()) {
             return false;
         }
         
         Company company = new Company(username, password, nit, name, sector, 
                                       contactPhone, contactFirstName, contactLastName, 
-                                      contactPosition);
+                                      contactPosition, id);
         return repository.save(company);
     }
 
@@ -49,5 +50,8 @@ public class CompanyService {
     public boolean existsCompanyNIT(String nit) {
         return repository.existsCompanyNIT(nit);
     }
+public Company getCompanyByUserId(int userId) {
+    return ((CompanyRepositoryImpl) repository).getCompanyByUserId(userId);
+}
 
 }

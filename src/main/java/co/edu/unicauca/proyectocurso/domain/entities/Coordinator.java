@@ -10,9 +10,10 @@ import java.util.List;
 public class Coordinator extends User {
     private String firstName;
     private String lastName;
+    private int id;
 
-    public Coordinator(String email, String password, String firstName, String lastName) {
-        super(email, password,"Coordinador");
+    public Coordinator(String email, String password, String firstName, String lastName, int id) {
+        super(email, password,"Coordinador", id);
         this.firstName = firstName;
         this.lastName = lastName;
     }

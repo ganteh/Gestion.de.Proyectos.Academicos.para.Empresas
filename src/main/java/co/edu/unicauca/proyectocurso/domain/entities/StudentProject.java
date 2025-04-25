@@ -50,7 +50,7 @@ public class StudentProject {
         this.id = id;
         this.studentID = studentID;
         this.projectID = projectID;
-        this.student = new Student(UUID.fromString(studentID));
+        this.student = new Student(UUID.fromString(studentID), id);
         this.project = new Project(UUID.fromString(projectID));
         this.status = status;
     }

@@ -17,10 +17,10 @@ import co.edu.unicauca.proyectocurso.access.CompanyRepositoryImpl;
  */
 public class GUIRegistrarProyectos extends javax.swing.JFrame {
 
-    /**
-     * Creates new form GUIRegistrarProyectos
-     */
-    public GUIRegistrarProyectos() {
+private String companyNIT;
+
+public GUIRegistrarProyectos(String nit) {
+    this.companyNIT = nit;
         initComponents();
     }
 
@@ -96,6 +96,13 @@ public class GUIRegistrarProyectos extends javax.swing.JFrame {
         });
 
         jLabel11.setText("Nit");
+
+        txtNIT.setEditable(false);
+        txtNIT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNITActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -210,8 +217,6 @@ public class GUIRegistrarProyectos extends javax.swing.JFrame {
         int presupuesto = (int) spnPresupuesto.getValue();
         String fechaStr = txtFecha.getText();
 
-        String companyNIT = txtNIT.getText(); // Nuevo campo para capturar el NIT
-
         try {
             LocalDate fecha = LocalDate.parse(fechaStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
@@ -238,6 +243,10 @@ public class GUIRegistrarProyectos extends javax.swing.JFrame {
     private void txtDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescripcionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDescripcionActionPerformed
+
+    private void txtNITActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNITActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNITActionPerformed
 
     /**
      * @param args the command line arguments
@@ -269,7 +278,8 @@ public class GUIRegistrarProyectos extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GUIRegistrarProyectos().setVisible(true);
+                //Company compa
+               // new GUIRegistrarProyectos(compa).setVisible(true);
             }
         });
     }

@@ -12,15 +12,26 @@ package co.edu.unicauca.proyectocurso.domain.entities;
  */
 public class User {
     private String username;
-    private String password;
+    String password;
     private String role; // Empresa, Coordinador, Estudiante
+    private int id;
 
-    public User(String username, String password, String role) {
+    public User(String username, String password, String role, int id) {
         this.username = username;
         this.password = password;
         this.role = role;
+        this.id = id;
     }
 
+
+
+public int getId() {
+    return id;
+}
+
+public void setId(int id) {
+    this.id = id;
+}
 
 
 

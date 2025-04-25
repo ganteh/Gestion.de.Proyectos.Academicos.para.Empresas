@@ -22,12 +22,12 @@ public class StudentService extends Observado {
     /**
      * Registra un nuevo estudiante en el sistema
      */
-    public boolean registerStudent(String username, String password, String firstName, String lastName, String program, String project_id) {
+    public boolean registerStudent(String username, String password, String firstName, String lastName, String program, String project_id, int id) {
         if (StudentRepository.estudanteExists(username)) {
             System.out.println("❌ El Estudiante ya existe.");
             return false;
         }
-        return StudentRepository.registerStudent(username, password, firstName, lastName, program, project_id);
+        return StudentRepository.registerStudent(username, password, firstName, lastName, program, project_id,id);
     }
     
     /**

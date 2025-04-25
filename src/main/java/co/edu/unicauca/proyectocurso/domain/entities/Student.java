@@ -8,14 +8,15 @@ import java.util.UUID;
  * @author ibell
  */
 public class Student extends User {
+    private int U_id;
     private UUID id;
     private String firstName;
     private String lastName;
     private String program;
     private String projectID;
    
-    public Student(String email, String password, String firstName, String lastName, String program, String projectID) {
-        super(email, password, "Estudiante");
+    public Student(String email, String password, String firstName, String lastName, String program, String projectID, int U_id) {
+        super(email, password, "Estudiante",U_id);
         this.id = UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -23,13 +24,13 @@ public class Student extends User {
         this.projectID = projectID;
     }
     
-    public Student(UUID id) {
-        super("", "", "Estudiante"); // Se deja el email y password vacíos por defecto
+    public Student(UUID id,int U_id) {
+        super("", "", "Estudiante", U_id); // Se deja el email y password vacíos por defecto
         this.id = id;
     }
     
-    public Student(String id, String firstName, String lastName, String program, String projectID){
-        super("x", "x", "Estudiante");
+    public Student(String id, String firstName, String lastName, String program, String projectID,int U_id){
+        super("x", "x", "Estudiante",U_id);
         this.id = UUID.fromString(id);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -43,7 +44,7 @@ public class Student extends User {
         return firstName;
     }
 
-    public UUID getId() {
+    public UUID getIdd() {
         return id;
     }
 

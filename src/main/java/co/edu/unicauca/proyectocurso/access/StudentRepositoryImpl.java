@@ -38,7 +38,7 @@ public class StudentRepositoryImpl implements IStudentRepository {
 
                 // Guardar los datos adicionales en `students`
                 try (PreparedStatement studentStmt = conn.prepareStatement(studentSql)) {
-                    studentStmt.setString(1, student.getId().toString());
+                    studentStmt.setString(1, student.getIdd().toString());
                     studentStmt.setInt(2, userId);
                     studentStmt.setString(3, student.getFirstName());
                     studentStmt.setString(4, student.getLastName());
@@ -64,8 +64,8 @@ public class StudentRepositoryImpl implements IStudentRepository {
     /**
      * Método para registrar estudiante
      */
-    public boolean registerStudent(String username, String password, String firstName, String lastName, String program, String project_id) {
-        return save(new Student(username, password, firstName, lastName, program, project_id));
+    public boolean registerStudent(String username, String password, String firstName, String lastName, String program, String project_id, int id) {
+        return save(new Student(username, password, firstName, lastName, program, project_id, id));
     }
 
     /**
@@ -88,7 +88,8 @@ public class StudentRepositoryImpl implements IStudentRepository {
                     rs.getString("first_name"),
                     rs.getString("last_name"),
                     rs.getString("program"),
-                    rs.getString("project_id")
+                    rs.getString("project_id"),
+                    rs.getInt("id")
                 );
             }
             return null; // Retorna null si no se encuentra el estudiante
@@ -140,7 +141,8 @@ public class StudentRepositoryImpl implements IStudentRepository {
                     rs.getString("first_name"),
                     rs.getString("last_name"),
                     rs.getString("program"),
-                    rs.getString("project_id")
+                    rs.getString("project_id"),
+                    rs.getInt("id")
                 ));
             }
         } catch (SQLException e) {
@@ -309,7 +311,7 @@ public class StudentRepositoryImpl implements IStudentRepository {
             } else {
                 stmt.setString(4, student.getProjectID());
             }
-            stmt.setString(5, student.getId().toString());
+            stmt.setString(5, student.getIdd().toString());
             
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -334,7 +336,8 @@ public class StudentRepositoryImpl implements IStudentRepository {
                     rs.getString("first_name"),
                     rs.getString("last_name"),
                     rs.getString("program"),
-                    rs.getString("project_id")
+                    rs.getString("project_id"),
+                    rs.getInt("id")
                 );
             }
         } catch (SQLException e) {
@@ -363,7 +366,8 @@ public class StudentRepositoryImpl implements IStudentRepository {
                     rs.getString("first_name"),
                     rs.getString("last_name"),
                     rs.getString("program"),
-                    projectId
+                    projectId,
+                    rs.getInt("id")
                 );
                 students.add(student);
             }

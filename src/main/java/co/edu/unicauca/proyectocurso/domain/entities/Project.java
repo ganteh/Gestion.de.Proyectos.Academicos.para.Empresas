@@ -33,7 +33,6 @@ public class Project {
         this.date = LocalDate.now(); // Fecha de creación
         this.FinalizationDate = dueDate != null ? Date.from(dueDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) : null; // Fecha de finalización
         this.state = ProjectState.RECEIVED;
-        this.company = new Company(companyNIT); // Asume que Company tiene un constructor con NIT
         this.comments = new ArrayList<>();
         this.students = new ArrayList<>();
         this.budget = budget;

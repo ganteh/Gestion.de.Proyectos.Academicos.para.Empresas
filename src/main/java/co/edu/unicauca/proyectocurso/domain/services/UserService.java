@@ -19,12 +19,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public boolean registerUser(String username, String password, String role) {
+    public boolean registerUser(String username, String password, String role, int id) {
         if (userRepository.userExists(username)) {
             System.out.println("❌ El usuario ya existe.");
             return false;
         }
-        return userRepository.registerUser(username, password, role);
+        return userRepository.registerUser(username, password, role, id);
     }
     
     public String validarUsuario(String username, String password) {
@@ -55,7 +55,10 @@ public boolean updateUser(String oldUsername, String newUsername, String newPass
     public boolean updateProfileCompleted(String username, boolean completed) {
     return userRepository.updateProfileCompleted(username, completed);
 }
+    public User GetUser(String username){
 
+    return userRepository.getUser(username);
+    }
 
 
 

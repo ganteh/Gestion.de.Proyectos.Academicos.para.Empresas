@@ -15,12 +15,13 @@ import javax.swing.JOptionPane;
 public class GUIRegistrarEstudiante extends javax.swing.JFrame {
     private String username;
     private String password;
-    
+    private int id;
     private StudentService StudentService;
     
-    public GUIRegistrarEstudiante(String username, String password) {
+    public GUIRegistrarEstudiante(String username, String password, int id) {
         this.username = username;
         this.password = password;
+        this.id = id;
         
         
         StudentService = new StudentService(new StudentRepositoryImpl());
@@ -150,7 +151,7 @@ public class GUIRegistrarEstudiante extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor complete todos los campos", 
                                         "Error de validación", JOptionPane.ERROR_MESSAGE);
         }
-        if(StudentService.registerStudent(username, password, firstName, lastName, program,"null"))
+        if(StudentService.registerStudent(username, password, firstName, lastName, program,"null",id))
         {
             JOptionPane.showMessageDialog(this, "Estudiante registrado correctamente");
                 UserService userServiceForUpdate = new UserService(new UserRepositoryImpl());

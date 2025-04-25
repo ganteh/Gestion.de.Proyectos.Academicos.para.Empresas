@@ -5,7 +5,9 @@
 package co.edu.unicauca.proyectocurso.presentation;
 
 import co.edu.unicauca.proyectocurso.access.CompanyRepositoryImpl;
+import co.edu.unicauca.proyectocurso.domain.entities.Company;
 import co.edu.unicauca.proyectocurso.domain.services.CompanyService;
+import co.edu.unicauca.proyectocurso.domain.services.UserService;
 
 /**
  *
@@ -19,18 +21,20 @@ public class GUICompany extends javax.swing.JFrame {
     private String nombre;
     
     private CompanyService companyService;
-    
-    public GUICompany() {
-        this.username = username;
-        this.password = password;
-        this.nit = nit;
-        this.nombre = nombre;
-        this.username = username;
-        this.password = password;
+
+    public GUICompany(Company user) {
+    this.username = user.getUsername(); // o getUsername(), según tu clase
+    this.password = user.getPassword();   // Según tu clase
+    this.nit = user.getNit();
+    this.nombre = user.getName();         // Si tienes nombre como campo
+
         
         companyService = new CompanyService(new CompanyRepositoryImpl());
         initComponents();
     }
+    
+    public GUICompany() {
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -102,7 +106,7 @@ public class GUICompany extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-            GUIRegistrarProyectos registrarProyecto = new GUIRegistrarProyectos();//luego se cambia
+            GUIRegistrarProyectos registrarProyecto = new GUIRegistrarProyectos(this.nit);//luego se cambia
             registrarProyecto.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 

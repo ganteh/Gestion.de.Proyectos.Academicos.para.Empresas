@@ -106,4 +106,31 @@ public boolean save(Company company) {
         return companies;
     }
     
+    public Company getCompanyByUserId(int userId) {
+    Company company = null;
+    String sql = "SELECT nit, name, sector, contact_phone, contact_name, contact_lastname, contact_position " +
+                 "FROM companies WHERE user_id = ?";
+    try (Connection conn = DatabaseConnection.getNewConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, userId);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                company = new Company();
+                company.setNit(rs.getString("nit"));
+                company.setName(rs.getString("name"));
+                company.setSector(rs.getString("sector"));
+                company.setContactPhone(rs.getString("contact_phone"));
+                company.setContactFirstName(rs.getString("contact_name"));
+                company.setContactLastName(rs.getString("contact_lastname"));
+                company.setContactPosition(rs.getString("contact_position"));
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return company;
+}
+
+    
 }

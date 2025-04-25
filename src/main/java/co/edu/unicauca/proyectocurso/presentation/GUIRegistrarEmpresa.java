@@ -20,12 +20,14 @@ public class GUIRegistrarEmpresa extends javax.swing.JFrame {
      */
     private String username;
     private String password;
+    private int id;
     
     private CompanyService companyService;
     
-    public GUIRegistrarEmpresa(String username, String password) {
+    public GUIRegistrarEmpresa(String username, String password,int id) {
         this.username = username;
         this.password = password;
+        this.id = id;
         
         
         
@@ -204,7 +206,7 @@ public class GUIRegistrarEmpresa extends javax.swing.JFrame {
         
         boolean resultado = companyService.registerCompany(
             username, password, nit, nombre, sector, 
-            telefono, contactoNombre, contactoApellido, contactoCargo
+            telefono, contactoNombre, contactoApellido, contactoCargo,id
         );
         
         if(resultado) {
@@ -284,7 +286,7 @@ public class GUIRegistrarEmpresa extends javax.swing.JFrame {
     java.awt.EventQueue.invokeLater(new Runnable() {
         public void run() {
             // Pasamos valores de prueba o temporales
-            new GUIRegistrarEmpresa("usuario_prueba", "contraseña_prueba").setVisible(true);
+            new GUIRegistrarEmpresa("usuario_prueba", "contraseña_prueba",15).setVisible(true);
         }
     });
     }
