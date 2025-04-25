@@ -187,7 +187,7 @@ public boolean updateUser(String oldUsername, String newUsername, String newPass
         e.printStackTrace();
         return false;
     }
-}
+} 
     public boolean isProfileCompleted(String username) {
     String sql = "SELECT profile_completed FROM users WHERE username = ?";
     try (PreparedStatement stmt = conn.prepareStatement(sql)) {
